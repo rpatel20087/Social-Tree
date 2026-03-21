@@ -1,16 +1,8 @@
-// ═══════════════════════════════════════════════
-//  Socialtree — shared.js
-//  Firebase (Auth + Firestore) + icons + utilities
-// ═══════════════════════════════════════════════
-
-// ──────────────────────────────────────────────
-//  🔥 FIREBASE CONFIG
-// ──────────────────────────────────────────────
 const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyAtRjAiDBebya-f9IzQUnKPmNxoVle6J34",
+  apiKey:            "API_KEY ",
   authDomain:        "socialtree-web.firebaseapp.com",
   projectId:         "socialtree-web",
-  storageBucket:     "socialtree-web.firebasestorage.app",
+  storageBucket:     "Storage_bukect",
   messagingSenderId: "916898496914",
   appId:             "1:916898496914:web:4b0a7a63332034d36e014b"
 };
