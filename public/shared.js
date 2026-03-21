@@ -1,8 +1,9 @@
+
 const FIREBASE_CONFIG = {
-  apiKey:            "API_KEY ",
+  apiKey:            "AIzaSyAtRjAiDBebya-f9IzQUnKPmNxoVle6J34",
   authDomain:        "socialtree-web.firebaseapp.com",
   projectId:         "socialtree-web",
-  storageBucket:     "Storage_bukect",
+  storageBucket:     "socialtree-web.firebasestorage.app",
   messagingSenderId: "916898496914",
   appId:             "1:916898496914:web:4b0a7a63332034d36e014b"
 };
@@ -182,6 +183,23 @@ function svgWith(id, size = 18, color) {
 }
 
 // ──────────────────────────────────────────────
+//  URL FIXER — ensures links always have a protocol
+//  Handles: "github.com/x" → "https://github.com/x"
+//           "http://..."   → kept as-is
+//           ""             → "#"
+// ──────────────────────────────────────────────
+function ensureUrl(url) {
+  if (!url || !url.trim()) return '#';
+  const u = url.trim();
+  // Already has a protocol
+  if (/^https?:\/\//i.test(u)) return u;
+  // mailto: / tel: — keep as-is
+  if (/^(mailto:|tel:)/i.test(u)) return u;
+  // Everything else — prepend https://
+  return 'https://' + u;
+}
+
+// ──────────────────────────────────────────────
 //  HTML GENERATOR  (used in editor + publish)
 // ──────────────────────────────────────────────
 function generatePageHTML(page) {
@@ -204,9 +222,10 @@ function generatePageHTML(page) {
     const svg = ic.svg
       .replace(/currentColor/g, ic.color)
       .replace('<svg ', `<svg width="18" height="18" `);
-    const safeUrl   = (l.url   || '#').replace(/"/g, '%22');
+    const safeUrl   = ensureUrl(l.url).replace(/"/g, '%22');
     const safeLabel = (l.label || 'Link').replace(/</g, '&lt;');
-    return `    <a href="${safeUrl}" class="link-btn"${l.url ? ' target="_blank" rel="noopener"' : ''}>
+    const hasUrl    = !!(l.url && l.url.trim());
+    return `    <a href="${safeUrl}" class="link-btn"${hasUrl ? ' target="_blank" rel="noopener"' : ''}>
       <span class="link-icon" style="color:${ic.color}">${svg}</span>
       <span class="link-title">${safeLabel}</span>
       <span class="link-arrow">↗</span>

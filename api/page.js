@@ -39,6 +39,20 @@ const ICONS = {
   link:      { color: '#777777', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>' },
 };
 
+// ── URL FIXER ──
+// Ensures all user-entered URLs have a protocol so the browser
+// doesn't treat them as relative paths on this domain.
+// "github.com/x"  → "https://github.com/x"
+// "https://..."   → unchanged
+// ""              → "#"
+function ensureUrl(url) {
+  if (!url || !url.trim()) return '#';
+  const u = url.trim();
+  if (/^https?:\/\//i.test(u)) return u;
+  if (/^(mailto:|tel:)/i.test(u)) return u;
+  return 'https://' + u;
+}
+
 // ── HTML GENERATOR ──
 function buildHTML(page) {
   const THEMES = {
@@ -60,9 +74,10 @@ function buildHTML(page) {
     const svg = ic.svg
       .replace(/currentColor/g, ic.color)
       .replace('<svg ', `<svg width="18" height="18" `);
-    const safeUrl   = (l.url   || '#').replace(/"/g, '%22');
+    const safeUrl   = ensureUrl(l.url).replace(/"/g, '%22');
+    const hasUrl    = !!(l.url && l.url.trim());
     const safeLabel = (l.label || 'Link').replace(/</g, '&lt;');
-    return `    <a href="${safeUrl}" class="link-btn"${l.url ? ' target="_blank" rel="noopener"' : ''}>
+    return `    <a href="${safeUrl}" class="link-btn"${hasUrl ? ' target="_blank" rel="noopener"' : ''}>
       <span class="link-icon" style="color:${ic.color}">${svg}</span>
       <span class="link-title">${safeLabel}</span>
       <span class="link-arrow">↗</span>

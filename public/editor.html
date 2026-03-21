@@ -429,9 +429,10 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; b
         <input type="text" placeholder="Title"
                value="${escHtml(link.label)}"
                oninput="updLink('${link.id}','label',this.value)">
-        <input type="url" placeholder="https://…"
+        <input type="text" placeholder="https://… or paste any link"
                value="${escHtml(link.url)}"
-               oninput="updLink('${link.id}','url',this.value)">
+               oninput="updLink('${link.id}','url',this.value)"
+               onblur="fixUrlField(this,'${link.id}')">
       </div>
       <button class="link-del" onclick="delLink('${link.id}')" title="Remove">✕</button>`;
 
@@ -460,6 +461,18 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; b
   function updLink(id, field, val) {
     const l = page.links?.find(l => l.id === id);
     if (l) { l[field] = val; updatePreview(); queueSave(); }
+  }
+
+  // Auto-prepend https:// when user leaves the URL field
+  function fixUrlField(input, linkId) {
+    const raw = input.value.trim();
+    if (!raw) return;
+    // Already has protocol — leave it alone
+    if (/^https?:\/\//i.test(raw) || /^(mailto:|tel:)/i.test(raw)) return;
+    // Prepend https://
+    const fixed = 'https://' + raw;
+    input.value = fixed;
+    updLink(linkId, 'url', fixed);
   }
 
   function delLink(id) {
@@ -527,7 +540,8 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; b
       const ic = ICONS[l.iconId] || ICONS.link;
       const a = document.createElement('a');
       a.className = 'pv-link';
-      a.href = l.url || '#'; if (l.url) a.target = '_blank';
+      a.href = ensureUrl(l.url);
+      if (l.url && l.url.trim()) a.target = '_blank';
       a.innerHTML = `
         <span style="display:flex;align-items:center;color:${ic.color}">${svgWith(l.iconId, 15, ic.color)}</span>
         <span style="flex:1">${l.label || 'Untitled'}</span>
