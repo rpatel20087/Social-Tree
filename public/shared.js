@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════
-//  softlink — shared.js
+//  Socialtree — shared.js
 //  Firebase (Auth + Firestore) + icons + utilities
 // ═══════════════════════════════════════════════
 
@@ -262,7 +262,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-directi
   <div class="links">
 ${linksHTML}
   </div>
-  <div class="footer">made with <a href="https://softlink.app" target="_blank">softlink</a></div>
+  <div class="footer">made with <a href="https://social-tree-self.vercel.app" target="_blank">Socialtree</a></div>
 </div>
 </body>
 </html>`;

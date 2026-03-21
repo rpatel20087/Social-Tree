@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>softlink — Dashboard</title>
+<title>Socialtree — Dashboard</title>
 <link rel="stylesheet" href="style.css">
 <style>
 body { background: var(--surface); }
@@ -132,7 +132,7 @@ body { background: var(--surface); }
 
 <!-- NAV -->
 <nav class="nav">
-  <a href="index.html" class="logo">soft<em>link</em></a>
+  <a href="index.html" class="logo">Social<em>tree</em></a>
   <div class="nav-r">
     <div class="user-chip">
       <div class="user-av" id="navAv">?</div>
@@ -184,7 +184,7 @@ body { background: var(--surface); }
     <div class="field">
       <label>URL slug</label>
       <div class="slug-row">
-        <span class="slug-pre">softlink.app/</span>
+        <span class="slug-pre">social-tree-self.vercel.app/u/</span>
         <input type="text" id="newSlug" placeholder="yourname" oninput="cleanSlug('newSlug','slugHint')">
       </div>
       <div class="slug-hint">Live at: <strong id="slugHint">yourname</strong>.vercel.app</div>
@@ -379,7 +379,7 @@ body { background: var(--surface); }
     const html = generatePageHTML(page);
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
-    a.download = `${page.slug || 'page'}-softlink.html`;
+    a.download = `${page.slug || 'page'}-socialtree.html`;
     a.click();
     toast('Downloaded!');
   }

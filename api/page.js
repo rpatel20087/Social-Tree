@@ -114,7 +114,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-directi
   <div class="links">
 ${links}
   </div>
-  <div class="footer">made with <a href="https://social-tree-self.vercel.app" target="_blank">softlink</a></div>
+  <div class="footer">made with <a href="https://social-tree-self.vercel.app" target="_blank">Socialtree</a></div>
 </div>
 </body>
 </html>`;
