@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>softlink — Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { background: var(--surface); }
+
+/* ── DASHBOARD SHELL ── */
+.dash { max-width: 920px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+.dash-hd {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 2.25rem; gap: 1rem; flex-wrap: wrap;
+}
+.dash-hd-left h1 { font-size: 1.65rem; line-height: 1.15; }
+.dash-hd-left p  { font-size: .82rem; color: var(--muted); margin-top: .2rem; }
+
+/* ── NAV USER CHIP ── */
+.user-chip { display: flex; align-items: center; gap: .6rem; }
+.user-av {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--blush); display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: .85rem; border: 2px solid var(--border); overflow: hidden;
+  flex-shrink: 0;
+}
+.user-av img { width: 100%; height: 100%; object-fit: cover; }
+.user-email { font-size: .8rem; color: var(--muted); max-width: 180px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── GRID ── */
+.pages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
+  gap: 1.15rem;
+}
+
+/* ── PAGE CARD ── */
+.page-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: box-shadow .2s, transform .2s;
+}
+.page-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+
+.card-preview {
+  height: 168px; cursor: pointer; position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: .35rem; overflow: hidden;
+}
+.preview-av {
+  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
+  border: 2px solid rgba(255,255,255,.8); box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  overflow: hidden; background: rgba(255,255,255,.6);
+}
+.preview-av img { width: 100%; height: 100%; object-fit: cover; }
+.preview-name { font-family: 'DM Serif Display', serif; font-size: .9rem; }
+.preview-link-bars { display: flex; flex-direction: column; gap: .22rem; width: 76%; margin-top: .1rem; }
+.preview-link-bar { height: 16px; border-radius: 5px; background: rgba(255,255,255,.45); }
+
+.card-hover-layer {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.32);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .18s; border-radius: 0;
+}
+.page-card:hover .card-hover-layer { opacity: 1; }
+
+.card-meta { padding: 1rem 1.1rem; border-top: 1px solid var(--border); }
+.card-row1 { display: flex; align-items: center; justify-content: space-between; margin-bottom: .4rem; }
+.card-title { font-weight: 600; font-size: .88rem;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%; }
+.card-url { font-size: .72rem; color: var(--muted); margin-bottom: .65rem;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-url a { color: var(--rose); }
+.card-actions { display: flex; gap: .35rem; flex-wrap: wrap; }
+.card-actions .btn { font-size: .73rem; padding: .35rem .8rem; }
+
+/* ── LIVE BADGE ── */
+.live-dot {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .7rem; font-weight: 600;
+  padding: .2rem .6rem; border-radius: 999px;
+}
+.live-dot.live   { background: var(--mint);   color: #2a7a4a; }
+.live-dot.draft  { background: var(--butter); color: #8a6a00; }
+.live-dot::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; flex-shrink: 0;
+}
+.live-dot.live::before  { background: #27ae60; }
+.live-dot.draft::before { background: #e8c840; }
+
+/* ── NEW PAGE CARD ── */
+.new-card {
+  min-height: 264px; border: 2px dashed var(--border); border-radius: var(--radius);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .7rem; cursor: pointer; transition: all .2s; color: var(--muted);
+  background: transparent;
+}
+.new-card:hover { border-color: var(--rose); color: var(--rose); background: rgba(232,160,160,.03); }
+.new-card-icon { font-size: 2rem; line-height: 1; }
+.new-card span { font-size: .84rem; font-weight: 500; }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 5rem 2rem; }
+.empty-state .emo { font-size: 3rem; margin-bottom: 1rem; }
+.empty-state h3 { margin-bottom: .5rem; }
+.empty-state p  { color: var(--muted); font-size: .88rem; margin-bottom: 1.5rem; }
+
+/* ── MODALS ── */
+.slug-row { display: flex; align-items: center; }
+.slug-pre {
+  padding: .68rem .8rem; background: var(--surface); border: 1.5px solid var(--border);
+  border-right: none; border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-size: .78rem; color: var(--muted); white-space: nowrap; flex-shrink: 0;
+}
+.slug-row input { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.slug-hint { font-size: .72rem; color: var(--muted); margin-top: .3rem; }
+.slug-hint strong { color: var(--rose); }
+
+/* ── LOADING ── */
+.loading-state { display: flex; align-items: center; justify-content: center; padding: 5rem; }
+
+@media (max-width: 520px) { .pages-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="logo">soft<em>link</em></a>
+  <div class="nav-r">
+    <div class="user-chip">
+      <div class="user-av" id="navAv">?</div>
+      <span class="user-email" id="navEmail"></span>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="Auth.signOut()">Sign out</button>
+  </div>
+</nav>
+
+<main class="dash">
+  <div class="dash-hd">
+    <div class="dash-hd-left">
+      <h1>My pages</h1>
+      <p class="text-muted">Manage and publish your link pages</p>
+    </div>
+    <button class="btn btn-ink" onclick="openNewModal()">+ New page</button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" id="loadState">
+    <div class="spin spin-dark" style="width:28px;height:28px"></div>
+  </div>
+
+  <!-- Grid -->
+  <div class="pages-grid hidden" id="grid"></div>
+
+  <!-- Empty -->
+  <div class="empty-state hidden" id="emptyState">
+    <div class="emo">🌸</div>
+    <h3>No pages yet</h3>
+    <p>Create your first link page and publish it live in minutes.</p>
+    <button class="btn btn-rose" onclick="openNewModal()">Create first page →</button>
+  </div>
+</main>
+
+<!-- ── NEW PAGE MODAL ── -->
+<div class="overlay" id="newModal" onclick="bgClose(event,'newModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('newModal')">×</button>
+    <h2 style="margin-bottom:.3rem">New page</h2>
+    <p class="text-muted text-sm" style="margin-bottom:1.5rem">Give your page a name and a unique URL slug.</p>
+
+    <div class="alert alert-err" id="newErr"></div>
+
+    <div class="field">
+      <label>Page name</label>
+      <input type="text" id="newName" placeholder="e.g. My Links" oninput="autoSlug()">
+    </div>
+    <div class="field">
+      <label>URL slug</label>
+      <div class="slug-row">
+        <span class="slug-pre">softlink.app/</span>
+        <input type="text" id="newSlug" placeholder="yourname" oninput="cleanSlug('newSlug','slugHint')">
+      </div>
+      <div class="slug-hint">Live at: <strong id="slugHint">yourname</strong>.vercel.app</div>
+    </div>
+
+    <button class="btn btn-rose btn-block" style="margin-top:.5rem" id="createBtn" onclick="createPage()">
+      Create page →
+    </button>
+  </div>
+</div>
+
+<!-- ── DELETE MODAL ── -->
+<div class="overlay" id="delModal" onclick="bgClose(event,'delModal')">
+  <div class="modal-box" style="max-width:380px">
+    <button class="modal-close" onclick="closeModal('delModal')">×</button>
+    <h2 style="margin-bottom:.45rem">Delete page?</h2>
+    <p class="text-muted text-sm" style="margin-bottom:1.5rem">
+      "<span id="delName"></span>" will be permanently deleted. This cannot be undone.
+    </p>
+    <div style="display:flex;gap:.75rem">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('delModal')">Cancel</button>
+      <button class="btn btn-danger"  style="flex:1;background:#c0392b;color:#fff;border:none" id="delConfirmBtn" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="shared.js"></script>
+<script>
+  let pages = [];
+  let deleteTargetId = null;
+  let currentUser = null;
+
+  // ── AUTH GUARD ──
+  Auth.onStateChange(user => {
+    if (!user) { window.location.href = 'login.html'; return; }
+    currentUser = user;
+
+    // Nav
+    const em = user.email || '';
+    $('navEmail').textContent = em;
+    if (user.photoURL) {
+      $('navAv').innerHTML = `<img src="${escHtml(user.photoURL)}" alt="">`;
+    } else {
+      $('navAv').textContent = em[0]?.toUpperCase() || '?';
+    }
+
+    loadPages();
+  });
+
+  // ── LOAD ──
+  async function loadPages() {
+    try {
+      pages = await DB.getMyPages(currentUser.uid);
+      $('loadState').classList.add('hidden');
+
+      if (pages.length === 0) {
+        $('emptyState').classList.remove('hidden');
+      } else {
+        $('grid').classList.remove('hidden');
+        renderGrid();
+      }
+    } catch (e) {
+      console.error('loadPages error:', e);
+      $('loadState').classList.add('hidden');
+
+      // Show a helpful error with the real message
+      const code = e?.code || '';
+      let msg = 'Failed to load pages.';
+      if (code === 'permission-denied') {
+        msg = 'Permission denied — update your Firestore security rules (see README).';
+      } else if (code === 'failed-precondition') {
+        msg = 'Missing Firestore index — the query has been simplified, redeploy and try again.';
+      } else if (e?.message) {
+        msg = 'Error: ' + e.message;
+      }
+
+      // Show inline error instead of just a toast so it's visible
+      $('emptyState').classList.remove('hidden');
+      $('emptyState').innerHTML = `
+        <div class="emo">⚠️</div>
+        <h3>Could not load pages</h3>
+        <p style="color:#c0392b;margin-bottom:1rem">${msg}</p>
+        <p class="text-muted" style="font-size:.78rem;margin-bottom:1.5rem">
+          Check the browser console (F12) for the full error.
+        </p>
+        <button class="btn btn-rose" onclick="location.reload()">Retry</button>
+        <button class="btn btn-outline" style="margin-top:.6rem" onclick="openNewModal()">+ New page</button>
+      `;
+      pages = [];
+    }
+  }
+
+  // ── RENDER GRID ──
+  function renderGrid() {
+    const grid = $('grid');
+    grid.innerHTML = '';
+    pages.forEach(p => grid.appendChild(buildCard(p)));
+
+    // "+ new" tile
+    const nc = document.createElement('div');
+    nc.className = 'new-card';
+    nc.onclick = openNewModal;
+    nc.innerHTML = `<div class="new-card-icon">+</div><span>New page</span>`;
+    grid.appendChild(nc);
+  }
+
+  // ── BUILD CARD ──
+  const THEME_BG = {
+    blush:'linear-gradient(135deg,#fff5f2,#fce8e0)',
+    mint:'linear-gradient(135deg,#f2fbf5,#d9f0e2)',
+    lavender:'linear-gradient(135deg,#f5f2ff,#e6dffa)',
+    butter:'linear-gradient(135deg,#fffbf0,#f8edcc)',
+    sky:'linear-gradient(135deg,#f0f8ff,#d0e8f8)',
+    white:'#ffffff',
+  };
+
+  function buildCard(p) {
+    const bg = THEME_BG[p.theme] || THEME_BG.blush;
+    const links3 = (p.links || []).slice(0, 3);
+
+    const avHtml = p.avatarDataUrl
+      ? `<div class="preview-av"><img src="${escHtml(p.avatarDataUrl)}" alt=""></div>`
+      : `<div class="preview-av">${p.avatarEmoji || '🌸'}</div>`;
+
+    const card = document.createElement('div');
+    card.className = 'page-card';
+    card.innerHTML = `
+      <div class="card-preview" style="background:${bg}" onclick="editPage('${p.id}')">
+        ${avHtml}
+        <div class="preview-name">${escHtml(p.name || 'Untitled')}</div>
+        <div class="preview-link-bars">
+          ${links3.map(() => `<div class="preview-link-bar"></div>`).join('')}
+        </div>
+        <div class="card-hover-layer">
+          <span class="btn btn-ink btn-sm">Edit page</span>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-row1">
+          <div class="card-title">${escHtml(p.name || 'Untitled')}</div>
+          <div class="live-dot ${p.vercelUrl ? 'live' : 'draft'}">${p.vercelUrl ? 'Live' : 'Draft'}</div>
+        </div>
+        <div class="card-url">
+          ${p.isPublished && p.slug
+            ? `<a href="https://social-tree-self.vercel.app/u/${escHtml(p.slug)}" target="_blank">social-tree-self.vercel.app/u/${escHtml(p.slug)}</a>`
+            : 'Not published yet'}
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-outline" onclick="editPage('${p.id}')">✏️ Edit</button>
+          <button class="btn btn-rose"    id="pub-${p.id}" onclick="publishPage('${p.id}',this)">🚀 Publish</button>
+          <button class="btn btn-ghost"   onclick="downloadPage('${p.id}')">⬇️ HTML</button>
+          <button class="btn btn-ghost"   style="color:var(--muted)" onclick="openDeleteModal('${p.id}','${escHtml(p.name || 'Untitled')}')">🗑</button>
+        </div>
+      </div>`;
+    return card;
+  }
+
+  // ── ACTIONS ──
+  function editPage(id) { window.location.href = `editor.html?id=${id}`; }
+
+  async function publishPage(id, btn) {
+    const page = pages.find(p => p.id === id);
+    if (!page) return;
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<div class="spin" style="width:13px;height:13px"></div>`;
+
+    try {
+      await DB.updatePage(id, { isPublished: true });
+      page.isPublished = true;
+      const url = `social-tree-self.vercel.app/u/${page.slug}`;
+      page.vercelUrl = url;
+      await DB.updatePage(id, { vercelUrl: url });
+      renderGrid();
+      toast('🎉 Live at ' + url, 'success');
+    } catch(e) {
+      console.error(e);
+      toast('Publish failed: ' + (e.message || 'unknown error'), 'error');
+      btn.innerHTML = orig; btn.disabled = false;
+    }
+  }
+
+  function downloadPage(id) {
+    const page = pages.find(p => p.id === id);
+    if (!page) return;
+    const html = generatePageHTML(page);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+    a.download = `${page.slug || 'page'}-softlink.html`;
+    a.click();
+    toast('Downloaded!');
+  }
+
+  function openDeleteModal(id, name) {
+    deleteTargetId = id;
+    $('delName').textContent = name;
+    $('delModal').classList.add('open');
+  }
+
+  async function confirmDelete() {
+    if (!deleteTargetId) return;
+    const btn = $('delConfirmBtn');
+    btn.innerHTML = '<div class="spin" style="width:14px;height:14px"></div>';
+    btn.disabled = true;
+    try {
+      await DB.deletePage(deleteTargetId);
+      pages = pages.filter(p => p.id !== deleteTargetId);
+      if (pages.length === 0) {
+        $('grid').classList.add('hidden');
+        $('emptyState').classList.remove('hidden');
+      } else {
+        renderGrid();
+      }
+      closeModal('delModal');
+      toast('Page deleted');
+    } catch(e) {
+      toast('Delete failed', 'error');
+    }
+    btn.innerHTML = 'Delete'; btn.disabled = false;
+    deleteTargetId = null;
+  }
+
+  // ── NEW PAGE MODAL ──
+  function openNewModal() {
+    $('newName').value = '';
+    $('newSlug').value = '';
+    $('slugHint').textContent = 'yourname';
+    $('newErr').className = 'alert alert-err';
+    $('newModal').classList.add('open');
+    setTimeout(() => $('newName').focus(), 80);
+  }
+
+  function autoSlug() {
+    const name = $('newName').value;
+    const s = slugify(name) || '';
+    $('newSlug').value = s;
+    $('slugHint').textContent = s || 'yourname';
+  }
+
+  function cleanSlug(inputId, hintId) {
+    const inp = $(inputId);
+    inp.value = slugify(inp.value);
+    $(hintId).textContent = inp.value || 'yourname';
+  }
+
+  async function createPage() {
+    const name = $('newName').value.trim();
+    const slug = $('newSlug').value.trim();
+    const errEl = $('newErr');
+    errEl.className = 'alert alert-err';
+
+    if (!name) { errEl.textContent = 'Please enter a page name.'; errEl.className += ' show'; return; }
+    if (!slug) { errEl.textContent = 'Please enter a URL slug.';  errEl.className += ' show'; return; }
+    if (!/^[a-z0-9-]+$/.test(slug)) {
+      errEl.textContent = 'Slug can only contain letters, numbers, and hyphens.';
+      errEl.className += ' show'; return;
+    }
+
+    const btn = $('createBtn');
+    btn.innerHTML = '<div class="spin" style="width:15px;height:15px;margin:0 auto"></div>';
+    btn.disabled = true;
+
+    try {
+      const taken = await DB.slugTaken(slug);
+      if (taken) {
+        errEl.textContent = 'That slug is already taken. Try another.';
+        errEl.className += ' show';
+        btn.innerHTML = 'Create page →'; btn.disabled = false; return;
+      }
+
+      const id = await DB.createPage({
+        userId: currentUser.uid,
+        name, slug,
+        theme: 'blush',
+        avatarEmoji: '🌸',
+        links: [],
+      });
+
+      closeModal('newModal');
+      window.location.href = `editor.html?id=${id}`;
+    } catch(e) {
+      console.error('createPage error:', e);
+      const msg = e?.code === 'permission-denied'
+        ? 'Permission denied — check Firestore rules (see README).'
+        : (e?.message || 'Something went wrong. Please try again.');
+      errEl.textContent = msg;
+      errEl.className += ' show';
+      btn.innerHTML = 'Create page →'; btn.disabled = false;
+    }
+  }
+
+  // ── MODAL HELPERS ──
+  function closeModal(id) { $(id).classList.remove('open'); }
+  function bgClose(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+</script>
+</body>
+</html>

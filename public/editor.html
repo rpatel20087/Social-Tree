@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>softlink — Editor</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── LAYOUT ── */
+body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: var(--surface); }
+
+/* ── EDITOR NAV ── */
+.e-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .7rem 1.4rem; background: var(--white); border-bottom: 1px solid var(--border);
+  flex-shrink: 0; gap: .75rem; flex-wrap: wrap;
+}
+.e-nav-l { display: flex; align-items: center; gap: .75rem; }
+.back-btn {
+  display: flex; align-items: center; gap: .35rem;
+  color: var(--muted); font-size: .82rem; background: none; border: none;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; padding: .35rem .55rem;
+  border-radius: 8px; transition: all .2s;
+}
+.back-btn:hover { background: var(--border); color: var(--ink); }
+.page-pill { font-size: .84rem; font-weight: 500; color: var(--ink); }
+.e-nav-r { display: flex; align-items: center; gap: .5rem; }
+.save-status { font-size: .73rem; color: var(--muted); transition: color .3s; }
+.save-status.saving  { color: var(--rose); }
+.save-status.saved   { color: #27ae60; }
+
+/* ── BODY ── */
+.e-body { display: flex; flex: 1; overflow: hidden; }
+
+/* ── PANEL ── */
+.e-panel {
+  width: 430px; flex-shrink: 0; background: var(--white);
+  border-right: 1px solid var(--border); overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.e-section { padding: 1.15rem 1.4rem; border-bottom: 1px solid var(--border); }
+.e-section:last-child { border-bottom: none; flex: 1; }
+.e-section-title {
+  font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: .9rem;
+}
+
+/* Avatar upload */
+.av-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.av-btn {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: var(--blush); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.45rem; cursor: pointer; overflow: hidden;
+  transition: opacity .2s; flex-shrink: 0;
+}
+.av-btn:hover { opacity: .8; }
+.av-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Theme dots */
+.theme-dots { display: flex; gap: .45rem; flex-wrap: wrap; }
+.tdot {
+  width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+  border: 3px solid transparent; transition: transform .15s, border-color .15s;
+  position: relative; flex-shrink: 0;
+}
+.tdot:hover { transform: scale(1.12); }
+.tdot.on { border-color: var(--ink); }
+.tdot::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .7rem; opacity: 0; }
+.tdot.on::after { opacity: 1; }
+
+/* Links */
+.links-list { display: flex; flex-direction: column; gap: .45rem; }
+.link-row {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: .65rem .75rem; display: flex; align-items: center; gap: .55rem;
+  transition: box-shadow .15s;
+}
+.link-row:hover { box-shadow: var(--shadow-sm); }
+.link-row.dragging { opacity: .4; }
+.drag-grip { color: #c8c0b8; font-size: .9rem; cursor: grab; user-select: none; flex-shrink: 0; }
+.icon-wrap { position: relative; flex-shrink: 0; }
+.icon-btn {
+  width: 32px; height: 32px; border-radius: 7px; background: var(--white);
+  border: 1px solid var(--border); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s; padding: 0; flex-shrink: 0;
+}
+.icon-btn:hover { background: var(--blush); }
+.icon-btn svg { width: 15px; height: 15px; }
+.link-inputs { flex: 1; display: flex; flex-direction: column; gap: .28rem; }
+.link-inputs input {
+  width: 100%; padding: .33rem .52rem; border: 1px solid var(--border);
+  border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: .78rem;
+  outline: none; background: var(--white); transition: border-color .2s;
+}
+.link-inputs input:focus { border-color: var(--rose); }
+.link-inputs input::placeholder { color: #c8c0b8; }
+.link-del { background: none; border: none; cursor: pointer; color: #ccc; font-size: .95rem; flex-shrink: 0; transition: color .2s; padding: 3px; }
+.link-del:hover { color: var(--rose); }
+.add-link-btn {
+  width: 100%; padding: .58rem; background: transparent;
+  border: 1.5px dashed var(--border); border-radius: 10px;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: .8rem;
+  color: var(--muted); transition: all .2s;
+  display: flex; align-items: center; justify-content: center; gap: .4rem; margin-top: .45rem;
+}
+.add-link-btn:hover { border-color: var(--rose); color: var(--rose); background: var(--card-bg); }
+
+/* Icon picker popup */
+.icon-popup {
+  position: absolute; background: var(--white); border: 1px solid var(--border);
+  border-radius: 13px; padding: .65rem; z-index: 300;
+  box-shadow: 0 8px 32px rgba(0,0,0,.13);
+  top: calc(100% + 5px); left: 0; width: 260px;
+}
+.icon-popup-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.i-opt {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 6px 3px; border-radius: 7px; cursor: pointer;
+  transition: background .15s; border: 1.5px solid transparent;
+}
+.i-opt:hover { background: #f5f0ec; }
+.i-opt.sel { border-color: var(--rose); background: #fdf0ee; }
+.i-opt svg { width: 17px; height: 17px; }
+.i-opt-lbl { font-size: .5rem; color: var(--muted); text-align: center; line-height: 1.2; }
+
+/* Publish section */
+.pub-section { padding: 1.1rem 1.4rem; background: var(--white); border-top: 1px solid var(--border); flex-shrink: 0; }
+.live-url-row {
+  display: flex; align-items: center; gap: .5rem;
+  background: var(--mint); border-radius: 8px; padding: .5rem .8rem; margin-bottom: .7rem;
+  font-size: .78rem;
+}
+.live-url-row .dot { width: 7px; height: 7px; border-radius: 50%; background: #27ae60; flex-shrink: 0; }
+.live-url-row a { color: #2a7a4a; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pub-btn { width: 100%; padding: .78rem; border-radius: var(--radius); font-size: .9rem; }
+
+/* ── PREVIEW PANE ── */
+.preview-pane {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: flex-start; padding: 2.25rem 1.5rem; overflow-y: auto;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 24px,
+    rgba(0,0,0,.018) 24px, rgba(0,0,0,.018) 25px
+  );
+}
+.preview-label { font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.1rem; }
+
+/* Phone */
+.phone {
+  width: 295px; background: var(--white); border-radius: 32px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.055);
+  overflow: hidden; min-height: 530px; flex-shrink: 0;
+}
+.phone-screen {
+  padding: 1.6rem 1.2rem 2.1rem; min-height: 530px;
+  display: flex; flex-direction: column; align-items: center; transition: background .4s;
+}
+
+/* Theme backgrounds for phone */
+.t-blush    .phone-screen { background: linear-gradient(135deg,#fff5f2,#fce8e0); }
+.t-mint     .phone-screen { background: linear-gradient(135deg,#f2fbf5,#d9f0e2); }
+.t-lavender .phone-screen { background: linear-gradient(135deg,#f5f2ff,#e6dffa); }
+.t-butter   .phone-screen { background: linear-gradient(135deg,#fffbf0,#f8edcc); }
+.t-sky      .phone-screen { background: linear-gradient(135deg,#f0f8ff,#d0e8f8); }
+.t-white    .phone-screen { background: #ffffff; }
+.t-blush    .pv-link { background: rgba(244,217,208,.5); }
+.t-mint     .pv-link { background: rgba(208,232,216,.5); }
+.t-lavender .pv-link { background: rgba(221,212,240,.5); }
+.t-butter   .pv-link { background: rgba(245,237,204,.5); }
+.t-sky      .pv-link { background: rgba(204,228,240,.5); }
+.t-white    .pv-link { background: #f0ece8; }
+
+/* Preview elements */
+.pv-av {
+  width: 68px; height: 68px; border-radius: 50%; margin-bottom: .75rem;
+  display: flex; align-items: center; justify-content: center; font-size: 1.7rem;
+  border: 3px solid rgba(255,255,255,.8); box-shadow: 0 2px 10px rgba(0,0,0,.08);
+  overflow: hidden; flex-shrink: 0; background: rgba(255,255,255,.6);
+}
+.pv-av img { width: 100%; height: 100%; object-fit: cover; }
+.pv-name { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: .22rem; text-align: center; }
+.pv-bio  { font-size: .72rem; color: var(--muted); text-align: center; line-height: 1.5; margin-bottom: 1.1rem; max-width: 210px; }
+.pv-links { width: 100%; display: flex; flex-direction: column; gap: .45rem; }
+.pv-link {
+  display: flex; align-items: center; gap: .52rem; padding: .62rem .82rem;
+  border-radius: 10px; text-decoration: none; color: var(--ink);
+  font-size: .78rem; font-weight: 500; transition: transform .15s;
+}
+.pv-link:hover { transform: translateY(-1px); }
+.pv-link svg { width: 15px; height: 15px; flex-shrink: 0; }
+.pv-footer { margin-top: 1.6rem; font-size: .6rem; color: var(--muted); opacity: .45; }
+
+@media (max-width: 760px) {
+  .e-body { flex-direction: column; }
+  .e-panel { width: 100%; flex: none; max-height: 52vh; }
+  .preview-pane { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- EDITOR NAV -->
+<header class="e-nav">
+  <div class="e-nav-l">
+    <button class="back-btn" onclick="goBack()">← Dashboard</button>
+    <div class="page-pill" id="pagePill">Loading…</div>
+  </div>
+  <div class="e-nav-r">
+    <span class="save-status" id="saveStatus">All saved</span>
+    <button class="btn btn-outline btn-sm" onclick="downloadHTML()">⬇ HTML</button>
+    <button class="btn btn-rose btn-sm"    id="pubBtnTop" onclick="publishPage()">🚀 Publish</button>
+  </div>
+</header>
+
+<div class="e-body">
+
+  <!-- ── PANEL ── -->
+  <aside class="e-panel">
+
+    <!-- PROFILE -->
+    <div class="e-section">
+      <div class="e-section-title">Profile</div>
+      <div class="av-row">
+        <div class="av-btn" id="avBtn" onclick="$('avInput').click()" title="Upload photo">
+          <span id="avEmoji">🌸</span>
+        </div>
+        <div>
+          <div style="font-size:.84rem;font-weight:500;margin-bottom:2px">Profile photo</div>
+          <div style="font-size:.73rem;color:var(--muted)">Click to upload</div>
+        </div>
+      </div>
+      <input type="file" id="avInput" accept="image/*" style="display:none" onchange="handleAvatar(this)">
+
+      <div class="field" style="margin-bottom:.7rem">
+        <label>Display name</label>
+        <input type="text" id="fName" placeholder="Your name" oninput="queueSave()">
+      </div>
+      <div class="field" style="margin-bottom:.7rem">
+        <label>URL slug</label>
+        <div style="display:flex;align-items:center">
+          <span style="padding:.68rem .7rem;background:var(--surface);border:1.5px solid var(--border);border-right:none;border-radius:var(--radius-sm) 0 0 var(--radius-sm);font-size:.76rem;color:var(--muted);white-space:nowrap">softlink.app/</span>
+          <input type="text" id="fSlug" placeholder="yourname"
+                 oninput="sanitizeSlug();queueSave()"
+                 style="border-radius:0 var(--radius-sm) var(--radius-sm) 0">
+        </div>
+        <div class="hint" id="slugHintText">URL: <strong id="slugShow">yourname</strong>.vercel.app</div>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Bio</label>
+        <textarea id="fBio" placeholder="A short line about you…" rows="2" oninput="queueSave()"></textarea>
+      </div>
+    </div>
+
+    <!-- THEME -->
+    <div class="e-section">
+      <div class="e-section-title">Theme</div>
+      <div class="theme-dots">
+        <div class="tdot on"  data-t="blush"    style="background:linear-gradient(135deg,#f9d5c8,#f0a0a0)" onclick="setTheme('blush',this)"   ></div>
+        <div class="tdot"     data-t="mint"     style="background:linear-gradient(135deg,#c8ecd4,#90c8a0)" onclick="setTheme('mint',this)"    ></div>
+        <div class="tdot"     data-t="lavender" style="background:linear-gradient(135deg,#ddd4f0,#b8a0d8)" onclick="setTheme('lavender',this)"></div>
+        <div class="tdot"     data-t="butter"   style="background:linear-gradient(135deg,#f8edcc,#e8c87a)" onclick="setTheme('butter',this)"  ></div>
+        <div class="tdot"     data-t="sky"      style="background:linear-gradient(135deg,#cce4f0,#80b8d8)" onclick="setTheme('sky',this)"     ></div>
+        <div class="tdot"     data-t="white"    style="background:#fff;border:1.5px solid #ddd"           onclick="setTheme('white',this)"   ></div>
+      </div>
+    </div>
+
+    <!-- LINKS -->
+    <div class="e-section" style="flex:1">
+      <div class="e-section-title">Links</div>
+      <div class="links-list" id="linksList"></div>
+      <button class="add-link-btn" onclick="addLink()"><span style="font-size:1rem">+</span> Add link</button>
+    </div>
+
+    <!-- PUBLISH -->
+    <div class="pub-section">
+      <div class="live-url-row hidden" id="liveRow">
+        <div class="dot"></div>
+        <span style="color:#2a7a4a;font-size:.75rem">Live at</span>
+        <a id="liveLink" href="#" target="_blank"></a>
+      </div>
+      <button class="btn btn-rose pub-btn" id="pubBtnBottom" onclick="publishPage()">
+        🚀 Publish to Vercel
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- ── PREVIEW ── -->
+  <section class="preview-pane">
+    <div class="preview-label">Live Preview</div>
+    <div class="phone t-blush" id="phone">
+      <div class="phone-screen">
+        <div class="pv-av" id="pvAv"><span id="pvAv_emoji">🌸</span></div>
+        <div class="pv-name"  id="pvName">Your Name</div>
+        <div class="pv-bio"   id="pvBio"></div>
+        <div class="pv-links" id="pvLinks"></div>
+        <div class="pv-footer">made with softlink</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="toast"></div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="shared.js"></script>
+<script>
+  // ── STATE ──
+  const pageId = new URLSearchParams(location.search).get('id');
+  if (!pageId) window.location.href = 'dashboard.html';
+
+  let page = null;
+  let currentUser = null;
+  let saveTimer = null;
+  let activePicker = null;
+
+  // ── AUTH GUARD ──
+  Auth.onStateChange(async user => {
+    if (!user) { window.location.href = 'login.html'; return; }
+    currentUser = user;
+    await loadPage();
+  });
+
+  // ── LOAD PAGE ──
+  async function loadPage() {
+    page = await DB.getPage(pageId);
+    if (!page || page.userId !== currentUser.uid) {
+      window.location.href = 'dashboard.html'; return;
+    }
+
+    // Populate fields
+    $('pagePill').textContent = page.name || 'Untitled';
+    $('fName').value = page.name  || '';
+    $('fSlug').value = page.slug  || '';
+    $('fBio').value  = page.bio   || '';
+    $('slugShow').textContent = page.slug || 'yourname';
+
+    // Avatar
+    if (page.avatarDataUrl) {
+      $('avBtn').innerHTML = `<img src="${page.avatarDataUrl}" alt="">`;
+    } else {
+      $('avEmoji').textContent = page.avatarEmoji || '🌸';
+    }
+
+    // Theme
+    document.querySelectorAll('.tdot').forEach(d => {
+      d.classList.toggle('on', d.dataset.t === page.theme);
+    });
+    $('phone').className = 'phone t-' + (page.theme || 'blush');
+
+    // Live URL
+    if (page.isPublished && page.slug) showLiveUrl(`social-tree-self.vercel.app/u/${page.slug}`);
+
+    // Links
+    (page.links || []).forEach(l => renderLink(l));
+    updatePreview();
+  }
+
+  // ── AVATAR ──
+  function handleAvatar(input) {
+    const file = input.files[0]; if (!file) return;
+    // Resize to max 200px to keep Firestore doc small
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = ev => {
+      img.onload = () => {
+        const MAX = 200;
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width  = img.width  * scale;
+        canvas.height = img.height * scale;
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+        page.avatarDataUrl = dataUrl;
+        page.avatarEmoji   = null;
+        $('avBtn').innerHTML = `<img src="${dataUrl}" alt="">`;
+        updatePreview(); queueSave();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ── THEME ──
+  function setTheme(name, el) {
+    page.theme = name;
+    document.querySelectorAll('.tdot').forEach(d => d.classList.remove('on'));
+    el.classList.add('on');
+    $('phone').className = 'phone t-' + name;
+    queueSave();
+  }
+
+  // ── SLUG SANITIZE ──
+  function sanitizeSlug() {
+    $('fSlug').value = slugify($('fSlug').value);
+    $('slugShow').textContent = $('fSlug').value || 'yourname';
+  }
+
+  // ── LINKS ──
+  function addLink(preset = null) {
+    const id = genId();
+    const link = { id, iconId: preset?.iconId || 'link', label: preset?.label || 'New Link', url: '' };
+    if (!page.links) page.links = [];
+    page.links.push(link);
+    renderLink(link);
+    updatePreview(); queueSave();
+  }
+
+  function renderLink(link) {
+    const list = $('linksList');
+    const ic = ICONS[link.iconId] || ICONS.link;
+    const div = document.createElement('div');
+    div.className = 'link-row'; div.dataset.id = link.id; div.draggable = true;
+
+    div.innerHTML = `
+      <span class="drag-grip" title="Drag to reorder">⠿</span>
+      <div class="icon-wrap">
+        <button class="icon-btn" onclick="openIconPicker('${link.id}',this)"
+                style="color:${ic.color}" title="Change icon">
+          ${svgWith(link.iconId, 15, ic.color)}
+        </button>
+      </div>
+      <div class="link-inputs">
+        <input type="text" placeholder="Title"
+               value="${escHtml(link.label)}"
+               oninput="updLink('${link.id}','label',this.value)">
+        <input type="url" placeholder="https://…"
+               value="${escHtml(link.url)}"
+               oninput="updLink('${link.id}','url',this.value)">
+      </div>
+      <button class="link-del" onclick="delLink('${link.id}')" title="Remove">✕</button>`;
+
+    div.addEventListener('dragstart', e => { e.dataTransfer.setData('id', link.id); div.classList.add('dragging'); });
+    div.addEventListener('dragend',   ()  => div.classList.remove('dragging'));
+    div.addEventListener('dragover',  e   => e.preventDefault());
+    div.addEventListener('drop', e => {
+      e.preventDefault();
+      const fid = e.dataTransfer.getData('id');
+      if (fid === link.id) return;
+      const fi = page.links.findIndex(l => l.id === fid);
+      const ti = page.links.findIndex(l => l.id === link.id);
+      const [m] = page.links.splice(fi, 1);
+      page.links.splice(ti, 0, m);
+      reRenderLinks(); updatePreview(); queueSave();
+    });
+
+    list.appendChild(div);
+  }
+
+  function reRenderLinks() {
+    $('linksList').innerHTML = '';
+    (page.links || []).forEach(l => renderLink(l));
+  }
+
+  function updLink(id, field, val) {
+    const l = page.links?.find(l => l.id === id);
+    if (l) { l[field] = val; updatePreview(); queueSave(); }
+  }
+
+  function delLink(id) {
+    page.links = page.links?.filter(l => l.id !== id) || [];
+    $('linksList').querySelector(`[data-id="${id}"]`)?.remove();
+    updatePreview(); queueSave();
+  }
+
+  // ── ICON PICKER ──
+  function openIconPicker(linkId, btn) {
+    document.querySelectorAll('.icon-popup').forEach(p => p.remove());
+    if (activePicker === btn) { activePicker = null; return; }
+    activePicker = btn;
+
+    const cur = page.links?.find(l => l.id === linkId)?.iconId || 'link';
+    const popup = document.createElement('div'); popup.className = 'icon-popup';
+    const grid  = document.createElement('div'); grid.className  = 'icon-popup-grid';
+
+    ICON_ORDER.forEach(id => {
+      const ic = ICONS[id];
+      const opt = document.createElement('div');
+      opt.className = 'i-opt' + (id === cur ? ' sel' : '');
+      opt.innerHTML = `${svgWith(id, 17, ic.color)}<span class="i-opt-lbl">${ic.name}</span>`;
+      opt.onclick = () => {
+        const l = page.links?.find(l => l.id === linkId);
+        if (l) {
+          l.iconId = id;
+          btn.style.color = ic.color;
+          btn.innerHTML   = svgWith(id, 15, ic.color);
+          updatePreview(); queueSave();
+        }
+        popup.remove(); activePicker = null;
+      };
+      grid.appendChild(opt);
+    });
+
+    popup.appendChild(grid);
+    btn.closest('.icon-wrap').appendChild(popup);
+    setTimeout(() => document.addEventListener('click', function h(e) {
+      if (!popup.contains(e.target) && e.target !== btn) {
+        popup.remove(); activePicker = null;
+        document.removeEventListener('click', h);
+      }
+    }), 0);
+  }
+
+  // ── LIVE PREVIEW ──
+  function updatePreview() {
+    if (!page) return;
+    const name = $('fName').value || page.name || 'Your Name';
+    const bio  = $('fBio').value  || '';
+
+    const pa = $('pvAv');
+    if (page.avatarDataUrl) {
+      pa.innerHTML = `<img src="${page.avatarDataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    } else {
+      pa.innerHTML = `<span style="font-size:1.7rem">${page.avatarEmoji || '🌸'}</span>`;
+    }
+
+    $('pvName').textContent = name;
+    $('pvBio').textContent  = bio;
+
+    const pl = $('pvLinks'); pl.innerHTML = '';
+    (page.links || []).forEach(l => {
+      const ic = ICONS[l.iconId] || ICONS.link;
+      const a = document.createElement('a');
+      a.className = 'pv-link';
+      a.href = l.url || '#'; if (l.url) a.target = '_blank';
+      a.innerHTML = `
+        <span style="display:flex;align-items:center;color:${ic.color}">${svgWith(l.iconId, 15, ic.color)}</span>
+        <span style="flex:1">${l.label || 'Untitled'}</span>
+        <span style="font-size:.68rem;opacity:.32">↗</span>`;
+      pl.appendChild(a);
+    });
+  }
+
+  // ── AUTOSAVE ──
+  function queueSave() {
+    updatePreview();
+    clearTimeout(saveTimer);
+    setSaveStatus('saving');
+    saveTimer = setTimeout(doSave, 1100);
+  }
+
+  function setSaveStatus(s) {
+    const el = $('saveStatus');
+    el.className = 'save-status ' + s;
+    el.textContent = s === 'saving' ? 'Saving…' : s === 'saved' ? '✓ Saved' : 'All saved';
+  }
+
+  async function doSave() {
+    if (!page || !currentUser) return;
+    const update = {
+      name:          $('fName').value.trim() || page.name,
+      slug:          $('fSlug').value.trim() || page.slug,
+      bio:           $('fBio').value,
+      theme:         page.theme,
+      avatarEmoji:   page.avatarEmoji,
+      avatarDataUrl: page.avatarDataUrl || null,
+      links:         page.links || [],
+    };
+    try {
+      await DB.updatePage(pageId, update);
+      Object.assign(page, update);
+      $('pagePill').textContent = page.name || 'Untitled';
+      setSaveStatus('saved');
+    } catch(e) {
+      setSaveStatus('');
+      toast('Save failed', 'error');
+    }
+  }
+
+  // ── PUBLISH ──
+  async function publishPage() {
+    await doSave();
+    const btns = [$('pubBtnTop'), $('pubBtnBottom')];
+    btns.forEach(b => { if(b){ b.disabled = true; b.innerHTML = '<div class="spin" style="width:14px;height:14px"></div> Publishing…'; }});
+
+    try {
+      const url = `social-tree-self.vercel.app/u/${page.slug}`;
+      await DB.updatePage(pageId, { isPublished: true, vercelUrl: url });
+      page.isPublished = true;
+      page.vercelUrl   = url;
+      showLiveUrl(url);
+      toast('🎉 Live at ' + url, 'success');
+    } catch(e) {
+      console.error(e);
+      toast('Publish failed: ' + (e.message || 'unknown error'), 'error');
+    }
+
+    btns.forEach(b => { if(b){ b.disabled = false; b.innerHTML = '🚀 Publish'; }});
+  }
+
+  function showLiveUrl(url) {
+    const row  = $('liveRow');
+    const link = $('liveLink');
+    row.classList.remove('hidden');
+    link.href = 'https://' + url;
+    link.textContent = url;
+  }
+
+  // ── DOWNLOAD ──
+  function downloadHTML() {
+    if (!page) return;
+    const snap = {
+      ...page,
+      name: $('fName').value || page.name,
+      bio:  $('fBio').value  || page.bio,
+    };
+    const html = generatePageHTML(snap);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+    a.download = (page.slug || 'page') + '-softlink.html';
+    a.click();
+    toast('Downloaded!');
+  }
+
+  // ── BACK ──
+  function goBack() {
+    doSave().then(() => { window.location.href = 'dashboard.html'; });
+  }
+</script>
+</body>
+</html>

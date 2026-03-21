@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/u/:slug", "destination": "/api/page?slug=:slug" },
+    { "source": "/",          "destination": "/public/index.html" },
+    { "source": "/login",     "destination": "/public/login.html" },
+    { "source": "/dashboard", "destination": "/public/dashboard.html" },
+    { "source": "/editor",    "destination": "/public/editor.html" }
+  ]
+}

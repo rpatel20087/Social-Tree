@@ -1,0 +1,33 @@
+cat > .gitignore << 'EOF'
+# Dependencies
+node_modules/
+
+# Vercel
+.vercel/
+
+# Environment variables - NEVER commit these
+.env
+.env.local
+.env.development
+.env.production
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Firebase
+.firebase/
+firebase-debug.log
+serviceAccountKey.json
+*service-account*.json
+*service_account*.json
+EOF
+echo ".gitignore created"

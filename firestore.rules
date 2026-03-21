@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /pages/{pageId} {
+
+      // CREATE — must be logged in, userId must match their own uid
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+
+      // READ own pages — owner reads by userId field
+      allow read: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+
+      // READ published pages — public access for /u/slug route
+      allow read: if resource.data.isPublished == true;
+
+      // UPDATE — owner only
+      allow update: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+
+      // DELETE — owner only
+      allow delete: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+    }
+  }
+}

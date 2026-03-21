@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>softlink — your links, beautifully hosted</title>
+<meta name="description" content="Build a stunning link page in minutes and publish it instantly to your own URL.">
+<link rel="stylesheet" href="style.css">
+<style>
+body { background: #faf8f5; overflow-x: hidden; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 93vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 7rem 1.5rem 5rem;
+  position: relative; overflow: hidden;
+}
+.hero-glow {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -5%,  rgba(244,217,208,.65) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 40% at 85% 80%,  rgba(208,232,216,.5)  0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at  8% 75%,  rgba(221,212,240,.4)  0%, transparent 55%);
+}
+.hero > * { position: relative; z-index: 1; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .3rem 1rem; border-radius: 999px;
+  background: rgba(255,255,255,.82); border: 1px solid var(--border);
+  font-size: .76rem; font-weight: 500; color: var(--muted);
+  margin-bottom: 1.8rem; backdrop-filter: blur(8px);
+}
+.pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rose); }
+
+.hero h1 { max-width: 680px; margin-bottom: 1.2rem; }
+.hero h1 em { color: var(--rose); font-style: italic; }
+.hero-sub { max-width: 460px; color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.7; }
+
+.hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 4.5rem; }
+
+/* ── PHONE STACK ── */
+.phone-stack {
+  display: flex; align-items: flex-end; justify-content: center;
+  gap: 1.25rem; flex-wrap: wrap;
+}
+.ph {
+  width: 190px; border-radius: 28px;
+  box-shadow: 0 18px 52px rgba(0,0,0,.13), 0 0 0 1px rgba(0,0,0,.055);
+  overflow: hidden; animation: float 4s ease-in-out infinite;
+}
+.ph:nth-child(2) { animation-delay: -1.4s; margin-bottom: 1.6rem; }
+.ph:nth-child(3) { animation-delay: -2.8s; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.ph-body { padding: 1.2rem .95rem 1.4rem; display: flex; flex-direction: column; align-items: center; }
+.ph-av { width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;border:2px solid rgba(255,255,255,.8);margin-bottom:.55rem;overflow:hidden; }
+.ph-name { font-family:'DM Serif Display',serif;font-size:.85rem;margin-bottom:.2rem; }
+.ph-bio  { font-size:.58rem;color:var(--muted);margin-bottom:.85rem;text-align:center; }
+.ph-links { width:100%;display:flex;flex-direction:column;gap:.3rem; }
+.ph-link { display:flex;align-items:center;gap:.45rem;padding:.42rem .6rem;border-radius:8px;font-size:.62rem;font-weight:500; }
+.ph-link svg { width:11px;height:11px;flex-shrink:0; }
+
+/* ── FEATURES ── */
+.features { max-width: 1060px; margin: 0 auto; padding: 6rem 1.5rem; }
+.section-head { text-align: center; margin-bottom: 3rem; }
+.section-head h2 { margin-top: .75rem; }
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.1rem; }
+.feat-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.6rem; transition: transform .2s, box-shadow .2s;
+}
+.feat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.feat-icon { font-size: 1.7rem; margin-bottom: .85rem; }
+.feat-card h3 { font-size: 1rem; margin-bottom: .4rem; }
+.feat-card p  { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+
+/* ── HOW IT WORKS ── */
+.how { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.how-inner { max-width: 860px; margin: 0 auto; padding: 6rem 1.5rem; text-align: center; }
+.steps { display: flex; gap: 0; margin-top: 3.5rem; position: relative; }
+.steps::before {
+  content:''; position:absolute; top:27px; left:12%; right:12%;
+  height:1px; background:var(--border); z-index:0;
+}
+.step-it { flex:1;display:flex;flex-direction:column;align-items:center;gap:.9rem;padding:0 .75rem;position:relative;z-index:1; }
+.step-num {
+  width:54px;height:54px;border-radius:50%;background:var(--card-bg);
+  border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;
+  font-family:'DM Serif Display',serif;font-size:1.15rem;
+}
+.step-it h4 { font-size:.9rem;font-weight:600; }
+.step-it p  { font-size:.78rem;color:var(--muted);line-height:1.55;text-align:center; }
+
+/* ── CTA BAND ── */
+.cta-band { padding: 5rem 1.5rem; }
+.cta-box {
+  max-width: 680px; margin: 0 auto;
+  background: var(--ink); color: #fff; border-radius: 24px;
+  padding: 3.5rem 2rem; text-align: center; position: relative; overflow: hidden;
+}
+.cta-box::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse 80% 55% at 70% -10%, rgba(244,217,208,.22) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 50% at 15% 110%, rgba(221,212,240,.18) 0%, transparent 55%);
+}
+.cta-box > * { position:relative;z-index:1; }
+.cta-box h2  { color:#fff; margin-bottom:.65rem; }
+.cta-box p   { color:rgba(255,255,255,.6); margin-bottom:1.9rem; font-size:.95rem; }
+.cta-btn {
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:#fff;color:var(--ink);font-family:'DM Sans',sans-serif;
+  font-size:.95rem;font-weight:600;padding:.9rem 2.1rem;border-radius:999px;
+  border:none;cursor:pointer;transition:all .2s;
+}
+.cta-btn:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.28); }
+
+/* ── FOOTER ── */
+footer {
+  text-align:center;padding:2.25rem 1.5rem;
+  border-top:1px solid var(--border);
+  font-size:.78rem;color:var(--muted);
+}
+footer a:hover { color:var(--ink); }
+
+@media(max-width:600px){
+  .steps { flex-direction:column;gap:2rem; }
+  .steps::before { display:none; }
+  .ph:not(:nth-child(2)) { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="logo">soft<em>link</em></a>
+  <div class="nav-r">
+    <a href="login.html"         class="btn btn-outline btn-sm">Log in</a>
+    <a href="login.html#signup"  class="btn btn-ink btn-sm">Get started free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="pill"><div class="pill-dot"></div> Free forever — no credit card</div>
+  <h1>Your links,<br><em>beautifully</em> hosted</h1>
+  <p class="hero-sub">Build a stunning link page in minutes. One click publishes it instantly to your own Vercel URL — no code, no config, no waiting.</p>
+
+  <div class="hero-cta">
+    <a href="login.html#signup" class="btn btn-rose btn-lg">Start building free →</a>
+    <a href="#how"              class="btn btn-outline btn-lg">See how it works</a>
+  </div>
+
+  <!-- Phone previews -->
+  <div class="phone-stack">
+    <!-- LAVENDER -->
+    <div class="ph" style="background:linear-gradient(135deg,#f5f2ff,#e6dffa)">
+      <div class="ph-body">
+        <div class="ph-av" style="background:var(--lavender);box-shadow:0 2px 8px rgba(0,0,0,.08)">🎨</div>
+        <div class="ph-name">Alex Chen</div>
+        <div class="ph-bio">designer & maker ✦</div>
+        <div class="ph-links">
+          <div class="ph-link" style="background:rgba(221,212,240,.55)">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color:#EA4C89"><path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 3.684 1.887 6.684 1.992 7.308 2.3-1.555 3.936-4.02 4.395-6.87zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.017-8.04 6.4 1.73 1.358 3.92 2.166 6.29 2.166 1.42 0 2.77-.29 4-.816zm-11.62-2.073c.232-.4 3.045-5.055 8.332-6.765.135-.045.27-.084.405-.12-.26-.585-.54-1.167-.832-1.74C7.17 11.775 2.206 11.71 1.756 11.7l-.004.312c0 2.633.998 5.037 2.634 6.855zm-2.42-8.955c.46.008 4.683.026 9.477-1.248-1.698-3.018-3.53-5.558-3.8-5.928-2.868 1.35-5.01 3.99-5.676 7.176z"/></svg>
+            Dribbble
+          </div>
+          <div class="ph-link" style="background:rgba(221,212,240,.55)">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color:#0057ff"><path d="M6.938 4.503c.702 0 1.34.06 1.92.188.577.13 1.07.33 1.485.61.41.28.733.65.96 1.12.225.47.34 1.05.34 1.73 0 .74-.17 1.36-.507 1.86-.338.49-.837.9-1.502 1.22.906.26 1.576.72 2.022 1.37.448.66.665 1.45.665 2.36 0 .75-.13 1.39-.41 1.93-.28.55-.67 1-.16 1.35-.49.36-1.06.62-1.7.78-.63.17-1.3.25-2.01.25H0V4.51h6.938v-.007zM16.94 9.557c1.012 0 1.926.22 2.74.66.817.44 1.46 1.12 1.927 2.04.468.92.7 2.04.7 3.36H14c.04.876.324 1.538.854 1.98.527.44 1.168.66 1.923.66.82 0 1.468-.212 1.94-.638.477-.424.757-.883.842-1.38h2.64c-.156.766-.455 1.46-.9 2.082-.445.62-.99 1.1-1.632 1.44-.643.34-1.334.51-2.073.51-1.26 0-2.29-.37-3.086-1.11-.797-.74-1.195-1.78-1.195-3.12 0-1.32.39-2.37 1.168-3.15.78-.78 1.81-1.17 3.088-1.32l.368-.01z"/></svg>
+            Behance
+          </div>
+          <div class="ph-link" style="background:rgba(221,212,240,.55)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            Portfolio
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLUSH — centre, elevated -->
+    <div class="ph" style="background:linear-gradient(135deg,#fff5f2,#fce8e0)">
+      <div class="ph-body">
+        <div class="ph-av" style="background:var(--blush);box-shadow:0 2px 8px rgba(0,0,0,.08)">🌸</div>
+        <div class="ph-name">Maya Patel</div>
+        <div class="ph-bio">living softly ✨</div>
+        <div class="ph-links">
+          <div class="ph-link" style="background:rgba(244,217,208,.55)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#E1306C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="#E1306C" stroke="none"/></svg>
+            Instagram
+          </div>
+          <div class="ph-link" style="background:rgba(244,217,208,.55)">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color:#000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.29 6.29 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
+            TikTok
+          </div>
+          <div class="ph-link" style="background:rgba(244,217,208,.55)">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color:#FF6719"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+            Newsletter
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINT -->
+    <div class="ph" style="background:linear-gradient(135deg,#f2fbf5,#d9f0e2)">
+      <div class="ph-body">
+        <div class="ph-av" style="background:var(--mint);box-shadow:0 2px 8px rgba(0,0,0,.08)">💻</div>
+        <div class="ph-name">Dev Kumar</div>
+        <div class="ph-bio">building things ⚡</div>
+        <div class="ph-links">
+          <div class="ph-link" style="background:rgba(208,232,216,.55)">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color:#24292f"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            GitHub
+          </div>
+          <div class="ph-link" style="background:rgba(208,232,216,.55)">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color:#0A66C2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </div>
+          <div class="ph-link" style="background:rgba(208,232,216,.55)">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color:#FF0000"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            YouTube
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="section-head">
+    <span class="badge badge-purple">Everything included</span>
+    <h2>Beautiful pages, zero friction</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon">⚡</div><h3>One-click publish</h3><p>Hit publish and your page goes live instantly on Vercel — your own URL, zero config needed.</p></div>
+    <div class="feat-card"><div class="feat-icon">🎨</div><h3>6 pastel themes</h3><p>Blush, mint, lavender, butter, sky, and white. All hand-crafted to look stunning out of the box.</p></div>
+    <div class="feat-card"><div class="feat-icon">🔗</div><h3>20+ brand icons</h3><p>Instagram, TikTok, GitHub, Spotify, Substack and more — crisp SVG brand icons, pixel perfect.</p></div>
+    <div class="feat-card"><div class="feat-icon">📦</div><h3>Download HTML</h3><p>Export your page as a single self-contained HTML file. Host anywhere — Netlify, GitHub Pages, your own server.</p></div>
+    <div class="feat-card"><div class="feat-icon">✏️</div><h3>Live preview</h3><p>See every change instantly in a phone mockup as you type. What you see is exactly what gets published.</p></div>
+    <div class="feat-card"><div class="feat-icon">🔒</div><h3>Always free</h3><p>No premium tier, no watermarks, no hidden limits. Build as many pages as you need, forever.</p></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <span class="badge badge-green">Simple as 1-2-3</span>
+    <h2 style="margin-top:.75rem">Live in under 2 minutes</h2>
+    <div class="steps">
+      <div class="step-it">
+        <div class="step-num">1</div>
+        <h4>Create account</h4>
+        <p>Sign up with your email. Takes 10 seconds, no credit card.</p>
+      </div>
+      <div class="step-it">
+        <div class="step-num">2</div>
+        <h4>Build your page</h4>
+        <p>Add links, pick a theme, upload a photo. Live preview as you go.</p>
+      </div>
+      <div class="step-it">
+        <div class="step-num">3</div>
+        <h4>Hit Publish</h4>
+        <p>One click — your page is live at <em>yourname</em>.vercel.app.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="cta-box">
+    <h2>Ready to share your links?</h2>
+    <p>Join creators, devs, and makers with beautiful link pages.</p>
+    <button class="cta-btn" onclick="location.href='login.html#signup'">
+      Create your page free →
+    </button>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="logo" style="font-size:1.1rem;display:inline-block;margin-bottom:.6rem">soft<em>link</em></a><br>
+  © 2025 softlink &nbsp;·&nbsp; <a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a>
+</footer>
+
+<div id="toast"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="shared.js"></script>
+<script>
+  // Redirect logged-in users to dashboard
+  Auth.onStateChange(user => {
+    if (user) {
+      document.querySelectorAll('a[href="login.html"], a[href="login.html#signup"]')
+        .forEach(el => el.setAttribute('href', 'dashboard.html'));
+    }
+  });
+</script>
+</body>
+</html>
