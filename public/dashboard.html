@@ -185,9 +185,9 @@ body { background: var(--surface); }
       <label>URL slug</label>
       <div class="slug-row">
         <span class="slug-pre">social-tree-self.vercel.app/u/</span>
-        <input type="text" id="newSlug" placeholder="yourname" oninput="">
+        <input type="text" id="newSlug" placeholder="yourname" oninput="cleanSlug('newSlug','slugHint')">
       </div>
-      
+      <div class="slug-hint">social-tree-self.vercel.app/u/<strong id="slugHint">yourname</strong></div>
     </div>
 
     <button class="btn btn-rose btn-block" style="margin-top:.5rem" id="createBtn" onclick="createPage()">
