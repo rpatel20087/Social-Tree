@@ -8,301 +8,274 @@
 <style>
 body {
   min-height: 100vh; display: flex; flex-direction: column;
-  background:
-    radial-gradient(ellipse 80% 55% at 50% -5%,  rgba(244,217,208,.55) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 90% 90%,  rgba(208,232,216,.4)  0%, transparent 55%),
-    #f7f4f0;
+  background: var(--surface);
 }
-
-.auth-wrap {
+.auth-bg {
   flex: 1; display: flex; align-items: center; justify-content: center;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem; position: relative;
+}
+.auth-bg::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%,  rgba(242,217,207,.6) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 90% 90%, rgba(205,232,214,.45) 0%, transparent 55%);
+  pointer-events: none;
 }
 
 .auth-card {
-  background: var(--white); border: 1px solid var(--border); border-radius: 22px;
-  padding: 2.5rem 2.25rem; width: 420px; max-width: 100%;
-  box-shadow: 0 4px 32px rgba(0,0,0,.09);
-  animation: slideUp .35s ease;
+  background: var(--white); border: 1px solid var(--border-l);
+  border-radius: var(--radius-lg); padding: 2.25rem 2.25rem;
+  width: 400px; max-width: 100%; box-shadow: var(--shadow);
+  position: relative; z-index: 1;
+  animation: slideUp .3s ease;
 }
-@keyframes slideUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
-.auth-top { text-align: center; margin-bottom: 2rem; }
-.auth-top .logo { font-size: 1.85rem; }
-.auth-top p { font-size: .84rem; color: var(--muted); margin-top: .3rem; }
+.auth-top { text-align: center; margin-bottom: 1.75rem; }
+.auth-top .logo { font-size: 1.65rem; justify-content: center; }
+.auth-top p { font-size: .82rem; color: var(--muted); margin-top: .3rem; }
 
 /* TABS */
-.tabs { display: flex; background: var(--surface); border-radius: 10px; padding: 4px; margin-bottom: 1.75rem; }
+.tabs { display: flex; background: var(--surface); border-radius: 8px; padding: 3px; margin-bottom: 1.6rem; }
 .tab {
-  flex: 1; text-align: center; padding: .58rem;
-  border-radius: 8px; font-size: .84rem; font-weight: 500;
-  color: var(--muted); cursor: pointer; transition: all .2s;
-  border: none; background: transparent; font-family: 'DM Sans', sans-serif;
+  flex: 1; text-align: center; padding: .55rem;
+  border-radius: 6px; font-size: .82rem; font-weight: 500;
+  color: var(--muted); cursor: pointer; transition: all .18s;
+  border: none; background: transparent; font-family: 'Inter', sans-serif;
 }
-.tab.active { background: var(--white); color: var(--ink); box-shadow: var(--shadow-sm); }
+.tab.active { background: var(--white); color: var(--ink); box-shadow: var(--shadow-xs); }
 
-/* FORMS */
-.auth-form { display: none; animation: fadeIn .2s ease; }
+.auth-form { display: none; animation: fadeIn .18s ease; }
 .auth-form.active { display: block; }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-/* Password wrapper */
+/* Password */
 .pw-wrap { position: relative; }
-.pw-wrap input { padding-right: 2.8rem; }
+.pw-wrap input { padding-right: 2.75rem; }
 .pw-eye {
-  position: absolute; right: .8rem; top: 50%; transform: translateY(-50%);
-  background: none; border: none; cursor: pointer; font-size: .85rem;
-  color: var(--muted); transition: color .2s; padding: 0;
+  position: absolute; right: .75rem; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: color .18s; padding: 0;
 }
 .pw-eye:hover { color: var(--ink); }
+.pw-eye svg { width: 16px; height: 16px; }
 
-/* Password strength */
-.pw-strength { display: flex; gap: 4px; margin-top: .4rem; }
-.pw-bar { flex: 1; height: 3px; border-radius: 99px; background: var(--border); transition: background .3s; }
-.pw-bar.weak   { background: #e8a0a0; }
-.pw-bar.fair   { background: #f5d67a; }
-.pw-bar.strong { background: #7ec89a; }
-.pw-strength-label { font-size: .68rem; color: var(--muted); margin-top: .2rem; }
+/* Strength meter */
+.pw-bars { display: flex; gap: 3px; margin-top: .38rem; }
+.pw-bar  { flex: 1; height: 3px; border-radius: 99px; background: var(--border); transition: background .28s; }
+.pw-bar.weak   { background: #d97b70; }
+.pw-bar.fair   { background: #e8c055; }
+.pw-bar.strong { background: #4caf7d; }
+.pw-lbl { font-size: .67rem; color: var(--muted); margin-top: .2rem; }
 
-.auth-footer { text-align: center; margin-top: 1.35rem; font-size: .82rem; color: var(--muted); }
+.auth-footer { text-align: center; margin-top: 1.25rem; font-size: .8rem; color: var(--muted); }
 .auth-footer a { color: var(--rose); font-weight: 500; }
 .auth-footer a:hover { color: var(--rose-d); }
 
-.btn-auth { width: 100%; padding: .8rem; border-radius: 10px; font-size: .9rem; margin-top: .2rem; }
-.btn-auth .spin { margin: 0 auto; }
+.btn-auth { width: 100%; padding: .72rem; border-radius: 8px; font-size: .88rem; margin-top: .15rem; }
 
-/* Google btn */
+/* Google */
 .btn-google {
-  width: 100%; padding: .72rem; border-radius: 10px;
+  width: 100%; padding: .68rem; border-radius: 8px;
   background: var(--white); border: 1.5px solid var(--border);
-  font-family: 'DM Sans', sans-serif; font-size: .88rem; font-weight: 500;
-  color: var(--ink); cursor: pointer; transition: all .2s;
-  display: flex; align-items: center; justify-content: center; gap: .65rem;
+  font-family: 'Inter', sans-serif; font-size: .85rem; font-weight: 500;
+  color: var(--ink); cursor: pointer; transition: all .18s;
+  display: flex; align-items: center; justify-content: center; gap: .6rem;
 }
-.btn-google:hover { background: var(--surface); border-color: #bbb; }
-.btn-google svg { width: 18px; height: 18px; flex-shrink: 0; }
+.btn-google:hover { background: var(--surface); border-color: var(--faint); }
+.btn-google svg { width: 18px; height: 18px; }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <a href="index.html" class="logo">Social<em>tree</em></a>
+  <a href="index.html" class="logo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
+    Socialtree
+  </a>
 </nav>
 
-<div class="auth-wrap">
+<div class="auth-bg">
   <div class="auth-card">
     <div class="auth-top">
-      <div class="logo">Social<em>tree</em></div>
-      <p>Create and host your link page</p>
+      <div class="logo" style="justify-content:center;font-size:1.65rem">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
+        Socialtree
+      </div>
+      <p>Your links, beautifully hosted</p>
     </div>
 
-    <!-- TABS -->
     <div class="tabs">
-      <button class="tab active" id="tabIn"  onclick="switchTab('in')">Sign in</button>
-      <button class="tab"        id="tabUp"  onclick="switchTab('up')">Create account</button>
+      <button class="tab active" id="tabIn" onclick="switchTab('in')">Sign in</button>
+      <button class="tab"        id="tabUp" onclick="switchTab('up')">Create account</button>
     </div>
 
-    <!-- ── SIGN IN ── -->
+    <!-- SIGN IN -->
     <div class="auth-form active" id="formIn">
-      <div class="alert alert-err" id="inErr"></div>
-
+      <div class="alert alert-err" id="inErr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="inErrTxt"></span>
+      </div>
       <div class="field">
-        <label>Email</label>
+        <label>Email address</label>
         <input type="email" id="inEmail" placeholder="you@example.com" autocomplete="email">
       </div>
       <div class="field">
         <label>Password</label>
         <div class="pw-wrap">
           <input type="password" id="inPw" placeholder="••••••••" autocomplete="current-password">
-          <button class="pw-eye" type="button" onclick="toggleEye('inPw',this)">👁</button>
+          <button class="pw-eye" type="button" onclick="toggleEye('inPw',this)">
+            <svg id="eye-in-on"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg id="eye-in-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
         </div>
       </div>
-
       <button class="btn btn-ink btn-auth" id="inBtn" onclick="doSignIn()">Sign in</button>
-
       <div class="divider-or">or</div>
       <button class="btn-google" onclick="doGoogle()">
         <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Continue with Google
       </button>
-
-      <div class="auth-footer">
-        No account? <a href="#" onclick="switchTab('up');return false">Create one free</a>
-      </div>
+      <div class="auth-footer">No account? <a href="#" onclick="switchTab('up');return false">Create one free</a></div>
     </div>
 
-    <!-- ── SIGN UP ── -->
+    <!-- SIGN UP -->
     <div class="auth-form" id="formUp">
-      <div class="alert alert-err" id="upErr"></div>
-      <div class="alert alert-ok"  id="upOk"></div>
-
+      <div class="alert alert-err" id="upErr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="upErrTxt"></span>
+      </div>
+      <div class="alert alert-ok" id="upOk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="upOkTxt"></span>
+      </div>
       <div class="field">
-        <label>Email</label>
+        <label>Email address</label>
         <input type="email" id="upEmail" placeholder="you@example.com" autocomplete="email">
       </div>
       <div class="field">
         <label>Password</label>
         <div class="pw-wrap">
-          <input type="password" id="upPw" placeholder="Min. 8 characters"
-                 autocomplete="new-password" oninput="checkStrength(this.value)">
-          <button class="pw-eye" type="button" onclick="toggleEye('upPw',this)">👁</button>
+          <input type="password" id="upPw" placeholder="Min. 8 characters" autocomplete="new-password" oninput="checkStrength(this.value)">
+          <button class="pw-eye" type="button" onclick="toggleEye('upPw',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
-        <div class="pw-strength" id="pwBars">
+        <div class="pw-bars" id="pwBars">
           <div class="pw-bar" id="pb1"></div>
           <div class="pw-bar" id="pb2"></div>
           <div class="pw-bar" id="pb3"></div>
         </div>
-        <div class="pw-strength-label" id="pwLabel"></div>
+        <div class="pw-lbl" id="pwLabel"></div>
       </div>
-
-      <button class="btn btn-rose btn-auth" id="upBtn" onclick="doSignUp()">Create free account →</button>
-
+      <button class="btn btn-rose btn-auth" id="upBtn" onclick="doSignUp()">Create free account</button>
       <div class="divider-or">or</div>
       <button class="btn-google" onclick="doGoogle()">
         <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Continue with Google
       </button>
-
-      <div class="auth-footer">
-        Already have an account? <a href="#" onclick="switchTab('in');return false">Sign in</a>
-      </div>
+      <div class="auth-footer">Already have an account? <a href="#" onclick="switchTab('in');return false">Sign in</a></div>
     </div>
   </div>
 </div>
 
 <div id="toast"></div>
 
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="shared.js"></script>
 <script>
   firebaseInit();
-
-  // Redirect if already logged in
   Auth.onStateChange(user => { if (user) window.location.href = 'dashboard.html'; });
-
-  // URL hash tab switching
   if (location.hash === '#signup') switchTab('up');
 
-  // ── TAB ──
   function switchTab(t) {
-    $('formIn').classList.toggle('active', t === 'in');
-    $('formUp').classList.toggle('active', t === 'up');
-    $('tabIn').classList.toggle('active',  t === 'in');
-    $('tabUp').classList.toggle('active',  t === 'up');
-    history.replaceState(null, '', t === 'up' ? '#signup' : location.pathname);
+    $('formIn').classList.toggle('active', t==='in');
+    $('formUp').classList.toggle('active', t==='up');
+    $('tabIn').classList.toggle('active',  t==='in');
+    $('tabUp').classList.toggle('active',  t==='up');
+    history.replaceState(null,'', t==='up' ? '#signup' : location.pathname);
   }
 
-  // ── PASSWORD VISIBILITY ──
   function toggleEye(id, btn) {
     const inp = $(id);
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-    btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+    const isText = inp.type === 'text';
+    inp.type = isText ? 'password' : 'text';
+    btn.querySelectorAll('svg').forEach((s,i) => s.style.display = (isText ? i===0 : i===1) ? '' : 'none');
   }
 
-  // ── PASSWORD STRENGTH ──
   function checkStrength(pw) {
-    const bars  = [$('pb1'), $('pb2'), $('pb3')];
-    const label = $('pwLabel');
+    const bars = [$('pb1'),$('pb2'),$('pb3')];
+    const lbl  = $('pwLabel');
     bars.forEach(b => b.className = 'pw-bar');
-    if (!pw) { label.textContent = ''; return; }
-    let score = 0;
-    if (pw.length >= 8)  score++;
-    if (/[A-Z]/.test(pw) || /[0-9]/.test(pw)) score++;
-    if (/[^A-Za-z0-9]/.test(pw) && pw.length >= 10) score++;
-    const levels = ['weak','fair','strong'];
-    const labels = ['Weak','Fair','Strong'];
-    for (let i = 0; i < score; i++) bars[i].classList.add(levels[score-1]);
-    label.textContent = labels[score-1] || '';
+    if (!pw) { lbl.textContent=''; return; }
+    let s = 0;
+    if (pw.length >= 8) s++;
+    if (/[A-Z0-9]/.test(pw)) s++;
+    if (/[^A-Za-z0-9]/.test(pw) && pw.length >= 10) s++;
+    const names = ['weak','fair','strong'];
+    for (let i=0;i<s;i++) bars[i].classList.add(names[s-1]);
+    lbl.textContent = ['Weak','Fair','Strong'][s-1]||'';
   }
 
-  // ── LOADING HELPER ──
-  function setLoading(btnId, on, originalHTML) {
-    const btn = $(btnId);
-    btn.disabled = on;
-    btn.innerHTML = on
-      ? `<div class="spin"></div>`
-      : originalHTML;
+  function showErr(errElId, txtElId, msg) {
+    $(errElId).className='alert alert-err show';
+    $(txtElId).textContent=msg;
   }
 
-  // ── SIGN IN ──
+  function setLoading(btnId, on, label) {
+    const b=$(btnId); b.disabled=on;
+    b.innerHTML = on ? `<div class="spin"></div>` : label;
+  }
+
   async function doSignIn() {
-    const email = $('inEmail').value.trim();
-    const pw    = $('inPw').value;
-    const errEl = $('inErr');
-    errEl.className = 'alert alert-err';
-
-    if (!email || !pw) {
-      errEl.textContent = 'Please fill in all fields.';
-      errEl.className += ' show'; return;
-    }
-
-    setLoading('inBtn', true);
-    try {
-      await Auth.signIn(email, pw);
-      // onAuthStateChanged will redirect
-    } catch (e) {
-      setLoading('inBtn', false, 'Sign in');
-      errEl.textContent = friendlyError(e.code);
-      errEl.className += ' show';
-    }
+    const email=$('inEmail').value.trim(), pw=$('inPw').value;
+    $('inErr').className='alert alert-err';
+    if (!email||!pw) { showErr('inErr','inErrTxt','Please fill in all fields.'); return; }
+    setLoading('inBtn',true);
+    try { await Auth.signIn(email,pw); }
+    catch(e) { setLoading('inBtn',false,'Sign in'); showErr('inErr','inErrTxt',friendlyError(e.code)); }
   }
 
-  // ── SIGN UP ──
   async function doSignUp() {
-    const email = $('upEmail').value.trim();
-    const pw    = $('upPw').value;
-    const errEl = $('upErr');
-    const okEl  = $('upOk');
-    errEl.className = 'alert alert-err';
-    okEl.className  = 'alert alert-ok';
-
-    if (!email) { errEl.textContent = 'Please enter your email.'; errEl.className += ' show'; return; }
-    if (pw.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.className += ' show'; return; }
-
-    setLoading('upBtn', true);
+    const email=$('upEmail').value.trim(), pw=$('upPw').value;
+    $('upErr').className='alert alert-err';
+    $('upOk').className='alert alert-ok';
+    if (!email) { showErr('upErr','upErrTxt','Please enter your email.'); return; }
+    if (pw.length<8) { showErr('upErr','upErrTxt','Password must be at least 8 characters.'); return; }
+    setLoading('upBtn',true);
     try {
-      await Auth.signUp(email, pw);
-      // onAuthStateChanged will redirect
-    } catch (e) {
-      setLoading('upBtn', false, 'Create free account →');
-      errEl.textContent = friendlyError(e.code);
-      errEl.className += ' show';
+      await Auth.signUp(email,pw);
+    } catch(e) {
+      setLoading('upBtn',false,'Create free account');
+      showErr('upErr','upErrTxt',friendlyError(e.code));
     }
   }
 
-  // ── GOOGLE SIGN IN ──
   async function doGoogle() {
     firebaseInit();
-    const provider = new firebase.auth.GoogleAuthProvider();
-    try {
-      await firebase.auth().signInWithPopup(provider);
-      // redirect handled by onAuthStateChanged
-    } catch (e) {
-      toast(friendlyError(e.code), 'error');
-    }
+    try { await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
+    catch(e) { toast(friendlyError(e.code),'error'); }
   }
 
-  // ── FRIENDLY FIREBASE ERRORS ──
   function friendlyError(code) {
-    const map = {
-      'auth/user-not-found':      'No account found with that email.',
-      'auth/wrong-password':      'Incorrect password. Try again.',
-      'auth/invalid-credential':  'Incorrect email or password.',
+    const m = {
+      'auth/user-not-found':'No account found with that email.',
+      'auth/wrong-password':'Incorrect password.',
+      'auth/invalid-credential':'Incorrect email or password.',
       'auth/email-already-in-use':'An account with that email already exists.',
-      'auth/weak-password':       'Password is too weak — try something stronger.',
-      'auth/invalid-email':       'Please enter a valid email address.',
-      'auth/too-many-requests':   'Too many attempts. Please wait a moment.',
-      'auth/popup-closed-by-user':'Sign-in popup was closed. Try again.',
+      'auth/weak-password':'Password is too weak.',
+      'auth/invalid-email':'Please enter a valid email address.',
+      'auth/too-many-requests':'Too many attempts. Please wait a moment.',
+      'auth/popup-closed-by-user':'Sign-in popup was closed.',
     };
-    return map[code] || 'Something went wrong. Please try again.';
+    return m[code]||'Something went wrong. Please try again.';
   }
 
-  // ── ENTER KEY ──
   document.addEventListener('keydown', e => {
-    if (e.key !== 'Enter') return;
+    if (e.key!=='Enter') return;
     if ($('formIn').classList.contains('active')) doSignIn();
     else doSignUp();
   });

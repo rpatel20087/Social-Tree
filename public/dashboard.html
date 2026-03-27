@@ -8,175 +8,172 @@
 <style>
 body { background: var(--surface); }
 
-/* ── DASHBOARD SHELL ── */
-.dash { max-width: 920px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-
+/* ── SHELL ── */
+.dash { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
 .dash-hd {
   display: flex; align-items: flex-end; justify-content: space-between;
   margin-bottom: 2.25rem; gap: 1rem; flex-wrap: wrap;
 }
-.dash-hd-left h1 { font-size: 1.65rem; line-height: 1.15; }
-.dash-hd-left p  { font-size: .82rem; color: var(--muted); margin-top: .2rem; }
+.dash-hd h1 { font-size: 1.7rem; }
+.dash-hd p  { font-size: .8rem; color: var(--muted); margin-top: .2rem; }
 
-/* ── NAV USER CHIP ── */
+/* ── NAV USER ── */
 .user-chip { display: flex; align-items: center; gap: .6rem; }
 .user-av {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: var(--blush); display: flex; align-items: center; justify-content: center;
-  font-weight: 600; font-size: .85rem; border: 2px solid var(--border); overflow: hidden;
-  flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--rose-l); color: var(--rose-d);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: .78rem; border: 1.5px solid var(--border);
+  overflow: hidden; flex-shrink: 0;
 }
-.user-av img { width: 100%; height: 100%; object-fit: cover; }
-.user-email { font-size: .8rem; color: var(--muted); max-width: 180px;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-av img { width:100%;height:100%;object-fit:cover; }
+.user-email { font-size: .78rem; color: var(--muted); max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /* ── GRID ── */
-.pages-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
-  gap: 1.15rem;
-}
+.pages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 1.1rem; }
 
 /* ── PAGE CARD ── */
 .page-card {
-  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
-  overflow: hidden; display: flex; flex-direction: column;
+  background: var(--white); border: 1px solid var(--border-l);
+  border-radius: var(--radius); overflow: hidden;
+  display: flex; flex-direction: column;
   transition: box-shadow .2s, transform .2s;
 }
 .page-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
 
 .card-preview {
-  height: 168px; cursor: pointer; position: relative;
+  height: 162px; cursor: pointer; position: relative;
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; gap: .35rem; overflow: hidden;
 }
 .preview-av {
-  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
-  border: 2px solid rgba(255,255,255,.8); box-shadow: 0 2px 8px rgba(0,0,0,.08);
-  overflow: hidden; background: rgba(255,255,255,.6);
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+  border: 2px solid rgba(255,255,255,.85); box-shadow: 0 1px 6px rgba(0,0,0,.1);
+  overflow: hidden; background: rgba(255,255,255,.6); flex-shrink: 0;
 }
-.preview-av img { width: 100%; height: 100%; object-fit: cover; }
-.preview-name { font-family: 'DM Serif Display', serif; font-size: .9rem; }
-.preview-link-bars { display: flex; flex-direction: column; gap: .22rem; width: 76%; margin-top: .1rem; }
-.preview-link-bar { height: 16px; border-radius: 5px; background: rgba(255,255,255,.45); }
+.preview-av img { width:100%;height:100%;object-fit:cover; }
+.preview-av svg { width:18px;height:18px;opacity:.5; }
+.preview-name { font-family:'Instrument Serif',serif; font-size:.9rem; color: var(--ink); }
+.preview-bars { display:flex;flex-direction:column;gap:.22rem;width:72%;margin-top:.08rem; }
+.preview-bar  { height:15px;border-radius:4px;background:rgba(255,255,255,.4); }
 
 .card-hover-layer {
   position: absolute; inset: 0;
-  background: rgba(0,0,0,.32);
+  background: rgba(15,10,5,.3);
   display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity .18s; border-radius: 0;
+  opacity: 0; transition: opacity .18s;
 }
 .page-card:hover .card-hover-layer { opacity: 1; }
 
-.card-meta { padding: 1rem 1.1rem; border-top: 1px solid var(--border); }
-.card-row1 { display: flex; align-items: center; justify-content: space-between; margin-bottom: .4rem; }
-.card-title { font-weight: 600; font-size: .88rem;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%; }
-.card-url { font-size: .72rem; color: var(--muted); margin-bottom: .65rem;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.card-url a { color: var(--rose); }
-.card-actions { display: flex; gap: .35rem; flex-wrap: wrap; }
-.card-actions .btn { font-size: .73rem; padding: .35rem .8rem; }
+.card-meta { padding: .95rem 1.1rem; border-top: 1px solid var(--border-l); }
+.card-row1 { display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem; }
+.card-title { font-weight:600;font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:58%; }
+.card-url   { font-size:.71rem;color:var(--muted);margin-bottom:.62rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+.card-url a { color:var(--rose); }
+.card-url a:hover { color:var(--rose-d); text-decoration:underline; }
+.card-actions { display:flex;gap:.35rem;flex-wrap:wrap; }
+.card-actions .btn { font-size:.72rem; }
 
-/* ── LIVE BADGE ── */
-.live-dot {
-  display: inline-flex; align-items: center; gap: .35rem;
-  font-size: .7rem; font-weight: 600;
-  padding: .2rem .6rem; border-radius: 999px;
+/* ── STATUS BADGE ── */
+.status-badge {
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.66rem;font-weight:600;letter-spacing:.03em;
+  padding:.18rem .55rem;border-radius:5px;
 }
-.live-dot.live   { background: var(--mint);   color: #2a7a4a; }
-.live-dot.draft  { background: var(--butter); color: #8a6a00; }
-.live-dot::before {
-  content: ''; width: 6px; height: 6px;
-  border-radius: 50%; flex-shrink: 0;
-}
-.live-dot.live::before  { background: #27ae60; }
-.live-dot.draft::before { background: #e8c840; }
+.status-badge svg { width:7px;height:7px; }
+.status-live  { background:#e3f5eb;color:#1a6e3c; }
+.status-draft { background:#f0ece8;color:var(--muted); }
 
-/* ── NEW PAGE CARD ── */
+/* ── NEW CARD ── */
 .new-card {
-  min-height: 264px; border: 2px dashed var(--border); border-radius: var(--radius);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: .7rem; cursor: pointer; transition: all .2s; color: var(--muted);
-  background: transparent;
+  min-height: 262px; border: 1.5px dashed var(--border);
+  border-radius: var(--radius); display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:.65rem;
+  cursor:pointer;transition:all .18s;color:var(--muted);background:transparent;
 }
-.new-card:hover { border-color: var(--rose); color: var(--rose); background: rgba(232,160,160,.03); }
-.new-card-icon { font-size: 2rem; line-height: 1; }
-.new-card span { font-size: .84rem; font-weight: 500; }
+.new-card:hover { border-color:var(--rose);color:var(--rose);background:rgba(212,117,106,.03); }
+.new-card-icon { width:42px;height:42px;border-radius:10px;border:1.5px dashed currentColor;display:flex;align-items:center;justify-content:center; }
+.new-card-icon svg { width:18px;height:18px; }
+.new-card span { font-size:.82rem;font-weight:500; }
 
-/* ── EMPTY STATE ── */
-.empty-state { text-align: center; padding: 5rem 2rem; }
-.empty-state .emo { font-size: 3rem; margin-bottom: 1rem; }
-.empty-state h3 { margin-bottom: .5rem; }
-.empty-state p  { color: var(--muted); font-size: .88rem; margin-bottom: 1.5rem; }
-
-/* ── MODALS ── */
-.slug-row { display: flex; align-items: center; }
-.slug-pre {
-  padding: .68rem .8rem; background: var(--surface); border: 1.5px solid var(--border);
-  border-right: none; border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-  font-size: .78rem; color: var(--muted); white-space: nowrap; flex-shrink: 0;
-}
-.slug-row input { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
-.slug-hint { font-size: .72rem; color: var(--muted); margin-top: .3rem; }
-.slug-hint strong { color: var(--rose); }
+/* ── EMPTY ── */
+.empty-state { text-align:center;padding:5rem 2rem; }
+.empty-icon { width:56px;height:56px;border-radius:14px;background:var(--rose-l);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem; }
+.empty-icon svg { width:26px;height:26px;color:var(--rose-d); }
+.empty-state h3 { margin-bottom:.45rem; }
+.empty-state p  { color:var(--muted);font-size:.86rem;margin-bottom:1.5rem; }
 
 /* ── LOADING ── */
-.loading-state { display: flex; align-items: center; justify-content: center; padding: 5rem; }
+.loading-state { display:flex;align-items:center;justify-content:center;padding:5rem; }
 
-@media (max-width: 520px) { .pages-grid { grid-template-columns: 1fr; } }
+/* ── MODAL SLUG ── */
+.slug-row { display:flex;align-items:center; }
+.slug-pre { padding:.62rem .75rem;background:var(--surface);border:1.5px solid var(--border);border-right:none;border-radius:var(--radius-sm) 0 0 var(--radius-sm);font-size:.74rem;color:var(--muted);white-space:nowrap;flex-shrink:0; }
+.slug-row input { border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+.slug-hint { font-size:.7rem;color:var(--muted);margin-top:.3rem; }
+.slug-hint strong { color:var(--rose); }
+
+@media(max-width:520px){ .pages-grid{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
-  <a href="index.html" class="logo">Social<em>tree</em></a>
+  <a href="index.html" class="logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
+    Socialtree
+  </a>
   <div class="nav-r">
     <div class="user-chip">
-      <div class="user-av" id="navAv">?</div>
+      <div class="user-av" id="navAv"></div>
       <span class="user-email" id="navEmail"></span>
     </div>
-    <button class="btn btn-ghost btn-sm" onclick="Auth.signOut()">Sign out</button>
+    <button class="btn btn-ghost btn-sm" onclick="Auth.signOut()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign out
+    </button>
   </div>
 </nav>
 
 <main class="dash">
   <div class="dash-hd">
-    <div class="dash-hd-left">
+    <div>
       <h1>My pages</h1>
       <p class="text-muted">Manage and publish your link pages</p>
     </div>
-    <button class="btn btn-ink" onclick="openNewModal()">+ New page</button>
+    <button class="btn btn-ink" onclick="openNewModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New page
+    </button>
   </div>
 
-  <!-- Loading -->
   <div class="loading-state" id="loadState">
-    <div class="spin spin-dark" style="width:28px;height:28px"></div>
+    <div class="spin spin-dark" style="width:26px;height:26px;border-width:2.5px"></div>
   </div>
-
-  <!-- Grid -->
   <div class="pages-grid hidden" id="grid"></div>
-
-  <!-- Empty -->
   <div class="empty-state hidden" id="emptyState">
-    <div class="emo">🌸</div>
+    <div class="empty-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
+    </div>
     <h3>No pages yet</h3>
     <p>Create your first link page and publish it live in minutes.</p>
-    <button class="btn btn-rose" onclick="openNewModal()">Create first page →</button>
+    <button class="btn btn-rose" onclick="openNewModal()">Create first page</button>
   </div>
 </main>
 
-<!-- ── NEW PAGE MODAL ── -->
+<!-- NEW PAGE MODAL -->
 <div class="overlay" id="newModal" onclick="bgClose(event,'newModal')">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeModal('newModal')">×</button>
-    <h2 style="margin-bottom:.3rem">New page</h2>
-    <p class="text-muted text-sm" style="margin-bottom:1.5rem">Give your page a name and a unique URL slug.</p>
-
-    <div class="alert alert-err" id="newErr"></div>
-
+    <button class="modal-close" onclick="closeModal('newModal')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <h2 style="font-size:1.35rem;margin-bottom:.25rem">New page</h2>
+    <p class="text-muted text-sm" style="margin-bottom:1.4rem">Choose a name and URL slug for your link page.</p>
+    <div class="alert alert-err" id="newErr">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="newErrTxt"></span>
+    </div>
     <div class="field">
       <label>Page name</label>
       <input type="text" id="newName" placeholder="e.g. My Links" oninput="autoSlug()">
@@ -187,304 +184,211 @@ body { background: var(--surface); }
         <span class="slug-pre">social-tree-self.vercel.app/u/</span>
         <input type="text" id="newSlug" placeholder="yourname" oninput="cleanSlug('newSlug','slugHint')">
       </div>
-      <div class="slug-hint">social-tree-self.vercel.app/u/<strong id="slugHint">yourname</strong></div>
+      <div class="slug-hint">Live at: <strong id="slugHint">yourname</strong></div>
     </div>
-
-    <button class="btn btn-rose btn-block" style="margin-top:.5rem" id="createBtn" onclick="createPage()">
-      Create page →
-    </button>
+    <button class="btn btn-rose btn-block" style="margin-top:.4rem" id="createBtn" onclick="createPage()">Create page</button>
   </div>
 </div>
 
-<!-- ── DELETE MODAL ── -->
+<!-- DELETE MODAL -->
 <div class="overlay" id="delModal" onclick="bgClose(event,'delModal')">
   <div class="modal-box" style="max-width:380px">
-    <button class="modal-close" onclick="closeModal('delModal')">×</button>
-    <h2 style="margin-bottom:.45rem">Delete page?</h2>
-    <p class="text-muted text-sm" style="margin-bottom:1.5rem">
-      "<span id="delName"></span>" will be permanently deleted. This cannot be undone.
-    </p>
-    <div style="display:flex;gap:.75rem">
+    <button class="modal-close" onclick="closeModal('delModal')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div style="width:44px;height:44px;border-radius:10px;background:#fff0ee;display:flex;align-items:center;justify-content:center;margin-bottom:1rem">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+    </div>
+    <h2 style="font-size:1.25rem;margin-bottom:.4rem">Delete page?</h2>
+    <p class="text-muted text-sm" style="margin-bottom:1.4rem">"<span id="delName"></span>" will be permanently deleted and cannot be recovered.</p>
+    <div style="display:flex;gap:.65rem">
       <button class="btn btn-outline" style="flex:1" onclick="closeModal('delModal')">Cancel</button>
-      <button class="btn btn-danger"  style="flex:1;background:#c0392b;color:#fff;border:none" id="delConfirmBtn" onclick="confirmDelete()">Delete</button>
+      <button class="btn" style="flex:1;background:#c0392b;color:#fff" id="delConfirmBtn" onclick="confirmDelete()">Delete page</button>
     </div>
   </div>
 </div>
 
 <div id="toast"></div>
 
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="shared.js"></script>
 <script>
-  let pages = [];
-  let deleteTargetId = null;
-  let currentUser = null;
+let pages = [], deleteTargetId = null, currentUser = null;
 
-  // ── AUTH GUARD ──
-  Auth.onStateChange(user => {
-    if (!user) { window.location.href = 'login.html'; return; }
-    currentUser = user;
+Auth.onStateChange(user => {
+  if (!user) { window.location.href='login.html'; return; }
+  currentUser = user;
+  $('navEmail').textContent = user.email||'';
+  if (user.photoURL) $('navAv').innerHTML=`<img src="${escHtml(user.photoURL)}" alt="">`;
+  else $('navAv').textContent=(user.email||'?')[0].toUpperCase();
+  loadPages();
+});
 
-    // Nav
-    const em = user.email || '';
-    $('navEmail').textContent = em;
-    if (user.photoURL) {
-      $('navAv').innerHTML = `<img src="${escHtml(user.photoURL)}" alt="">`;
-    } else {
-      $('navAv').textContent = em[0]?.toUpperCase() || '?';
-    }
-
-    loadPages();
-  });
-
-  // ── LOAD ──
-  async function loadPages() {
-    try {
-      pages = await DB.getMyPages(currentUser.uid);
-      $('loadState').classList.add('hidden');
-
-      if (pages.length === 0) {
-        $('emptyState').classList.remove('hidden');
-      } else {
-        $('grid').classList.remove('hidden');
-        renderGrid();
-      }
-    } catch (e) {
-      console.error('loadPages error:', e);
-      $('loadState').classList.add('hidden');
-
-      // Show a helpful error with the real message
-      const code = e?.code || '';
-      let msg = 'Failed to load pages.';
-      if (code === 'permission-denied') {
-        msg = 'Permission denied — update your Firestore security rules (see README).';
-      } else if (code === 'failed-precondition') {
-        msg = 'Missing Firestore index — the query has been simplified, redeploy and try again.';
-      } else if (e?.message) {
-        msg = 'Error: ' + e.message;
-      }
-
-      // Show inline error instead of just a toast so it's visible
-      $('emptyState').classList.remove('hidden');
-      $('emptyState').innerHTML = `
-        <div class="emo">⚠️</div>
-        <h3>Could not load pages</h3>
-        <p style="color:#c0392b;margin-bottom:1rem">${msg}</p>
-        <p class="text-muted" style="font-size:.78rem;margin-bottom:1.5rem">
-          Check the browser console (F12) for the full error.
-        </p>
-        <button class="btn btn-rose" onclick="location.reload()">Retry</button>
-        <button class="btn btn-outline" style="margin-top:.6rem" onclick="openNewModal()">+ New page</button>
-      `;
-      pages = [];
-    }
+// ── LOAD ──
+async function loadPages() {
+  try {
+    pages = await DB.getMyPages(currentUser.uid);
+    $('loadState').classList.add('hidden');
+    if (pages.length===0) { $('emptyState').classList.remove('hidden'); return; }
+    $('grid').classList.remove('hidden');
+    renderGrid();
+  } catch(e) {
+    console.error('loadPages:',e);
+    $('loadState').classList.add('hidden');
+    $('emptyState').classList.remove('hidden');
+    $('emptyState').innerHTML=`
+      <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <h3>Could not load pages</h3>
+      <p style="color:#a83030">${e?.code==='permission-denied'?'Check Firestore security rules.':e?.message||'Unknown error'}</p>
+      <button class="btn btn-outline" style="margin-top:1rem" onclick="location.reload()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        Retry
+      </button>`;
   }
+}
 
-  // ── RENDER GRID ──
-  function renderGrid() {
-    const grid = $('grid');
-    grid.innerHTML = '';
-    pages.forEach(p => grid.appendChild(buildCard(p)));
+// ── THEME BG ──
+const THEME_BG={blush:'linear-gradient(135deg,#fff5f2,#fce8e0)',mint:'linear-gradient(135deg,#f2fbf5,#d9f0e2)',lavender:'linear-gradient(135deg,#f5f2ff,#e6dffa)',butter:'linear-gradient(135deg,#fffbf0,#f8edcc)',sky:'linear-gradient(135deg,#f0f8ff,#d0e8f8)',white:'#fafafa'};
 
-    // "+ new" tile
-    const nc = document.createElement('div');
-    nc.className = 'new-card';
-    nc.onclick = openNewModal;
-    nc.innerHTML = `<div class="new-card-icon">+</div><span>New page</span>`;
-    grid.appendChild(nc);
-  }
+function renderGrid() {
+  const grid=$('grid'); grid.innerHTML='';
+  pages.forEach(p=>grid.appendChild(buildCard(p)));
+  const nc=document.createElement('div'); nc.className='new-card'; nc.onclick=openNewModal;
+  nc.innerHTML=`<div class="new-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><span>New page</span>`;
+  grid.appendChild(nc);
+}
 
-  // ── BUILD CARD ──
-  const THEME_BG = {
-    blush:'linear-gradient(135deg,#fff5f2,#fce8e0)',
-    mint:'linear-gradient(135deg,#f2fbf5,#d9f0e2)',
-    lavender:'linear-gradient(135deg,#f5f2ff,#e6dffa)',
-    butter:'linear-gradient(135deg,#fffbf0,#f8edcc)',
-    sky:'linear-gradient(135deg,#f0f8ff,#d0e8f8)',
-    white:'#ffffff',
-  };
-
-  function buildCard(p) {
-    const bg = THEME_BG[p.theme] || THEME_BG.blush;
-    const links3 = (p.links || []).slice(0, 3);
-
-    const avHtml = p.avatarDataUrl
-      ? `<div class="preview-av"><img src="${escHtml(p.avatarDataUrl)}" alt=""></div>`
-      : `<div class="preview-av">${p.avatarEmoji || '🌸'}</div>`;
-
-    const card = document.createElement('div');
-    card.className = 'page-card';
-    card.innerHTML = `
-      <div class="card-preview" style="background:${bg}" onclick="editPage('${p.id}')">
-        ${avHtml}
-        <div class="preview-name">${escHtml(p.name || 'Untitled')}</div>
-        <div class="preview-link-bars">
-          ${links3.map(() => `<div class="preview-link-bar"></div>`).join('')}
-        </div>
-        <div class="card-hover-layer">
-          <span class="btn btn-ink btn-sm">Edit page</span>
-        </div>
+function buildCard(p) {
+  const bg=THEME_BG[p.theme]||THEME_BG.blush;
+  const avHtml=p.avatarDataUrl
+    ?`<div class="preview-av"><img src="${escHtml(p.avatarDataUrl)}" alt=""></div>`
+    :`<div class="preview-av"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
+  const liveUrl=`https://social-tree-self.vercel.app/u/${p.slug}`;
+  const card=document.createElement('div'); card.className='page-card';
+  card.innerHTML=`
+    <div class="card-preview" style="background:${bg}" onclick="editPage('${p.id}')">
+      ${avHtml}
+      <div class="preview-name">${escHtml(p.name||'Untitled')}</div>
+      <div class="preview-bars">
+        ${(p.links||[]).slice(0,3).map(()=>'<div class="preview-bar"></div>').join('')}
       </div>
-      <div class="card-meta">
-        <div class="card-row1">
-          <div class="card-title">${escHtml(p.name || 'Untitled')}</div>
-          <div class="live-dot ${p.vercelUrl ? 'live' : 'draft'}">${p.vercelUrl ? 'Live' : 'Draft'}</div>
-        </div>
-        <div class="card-url">
-          ${p.isPublished && p.slug
-            ? `<a href="https://social-tree-self.vercel.app/u/${escHtml(p.slug)}" target="_blank">social-tree-self.vercel.app/u/${escHtml(p.slug)}</a>`
-            : 'Not published yet'}
-        </div>
-        <div class="card-actions">
-          <button class="btn btn-outline" onclick="editPage('${p.id}')">✏️ Edit</button>
-          <button class="btn btn-rose"    id="pub-${p.id}" onclick="publishPage('${p.id}',this)">🚀 Publish</button>
-          <button class="btn btn-ghost"   onclick="downloadPage('${p.id}')">⬇️ HTML</button>
-          <button class="btn btn-ghost"   style="color:var(--muted)" onclick="openDeleteModal('${p.id}','${escHtml(p.name || 'Untitled')}')">🗑</button>
-        </div>
-      </div>`;
-    return card;
+      <div class="card-hover-layer">
+        <span class="btn btn-ink btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit
+        </span>
+      </div>
+    </div>
+    <div class="card-meta">
+      <div class="card-row1">
+        <span class="card-title">${escHtml(p.name||'Untitled')}</span>
+        ${p.isPublished
+          ?`<span class="status-badge status-live"><svg viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>Live</span>`
+          :`<span class="status-badge status-draft"><svg viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Draft</span>`}
+      </div>
+      <div class="card-url">
+        ${p.isPublished&&p.slug
+          ?`<a href="${liveUrl}" target="_blank">${liveUrl.replace('https://','')}</a>`
+          :`<span>Not published yet</span>`}
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-outline btn-sm" onclick="editPage('${p.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit
+        </button>
+        <button class="btn btn-rose btn-sm" id="pub-${p.id}" onclick="publishPage('${p.id}',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+          Publish
+        </button>
+        <button class="icon-btn" title="Download HTML" onclick="downloadPage('${p.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+        <button class="icon-btn danger" title="Delete page" onclick="openDeleteModal('${p.id}','${escHtml(p.name||'Untitled')}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+        </button>
+      </div>
+    </div>`;
+  return card;
+}
+
+function editPage(id)  { window.location.href=`editor.html?id=${id}`; }
+
+async function publishPage(id, btn) {
+  const page=pages.find(p=>p.id===id); if(!page) return;
+  const orig=btn.innerHTML; btn.disabled=true;
+  btn.innerHTML=`<div class="spin" style="width:13px;height:13px"></div>`;
+  try {
+    const url=`social-tree-self.vercel.app/u/${page.slug}`;
+    await DB.updatePage(id,{isPublished:true,vercelUrl:url});
+    page.isPublished=true; page.vercelUrl=url;
+    renderGrid();
+    toast('Page is live','success');
+  } catch(e) {
+    toast('Publish failed','error');
+    btn.innerHTML=orig; btn.disabled=false;
   }
+}
 
-  // ── ACTIONS ──
-  function editPage(id) { window.location.href = `editor.html?id=${id}`; }
+function downloadPage(id) {
+  const page=pages.find(p=>p.id===id); if(!page) return;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([generatePageHTML(page)],{type:'text/html'}));
+  a.download=`${page.slug||'page'}-socialtree.html`; a.click();
+  toast('HTML downloaded');
+}
 
-  async function publishPage(id, btn) {
-    const page = pages.find(p => p.id === id);
-    if (!page) return;
-    const orig = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = `<div class="spin" style="width:13px;height:13px"></div>`;
+function openDeleteModal(id, name) {
+  deleteTargetId=id; $('delName').textContent=name;
+  $('delModal').classList.add('open');
+}
 
-    try {
-      await DB.updatePage(id, { isPublished: true });
-      page.isPublished = true;
-      const url = `social-tree-self.vercel.app/u/${page.slug}`;
-      page.vercelUrl = url;
-      await DB.updatePage(id, { vercelUrl: url });
-      renderGrid();
-      toast('🎉 Live at ' + url, 'success');
-    } catch(e) {
-      console.error(e);
-      toast('Publish failed: ' + (e.message || 'unknown error'), 'error');
-      btn.innerHTML = orig; btn.disabled = false;
-    }
+async function confirmDelete() {
+  if(!deleteTargetId) return;
+  const btn=$('delConfirmBtn');
+  btn.innerHTML=`<div class="spin" style="width:14px;height:14px"></div>`; btn.disabled=true;
+  try {
+    await DB.deletePage(deleteTargetId);
+    pages=pages.filter(p=>p.id!==deleteTargetId);
+    if(pages.length===0){ $('grid').classList.add('hidden'); $('emptyState').classList.remove('hidden'); }
+    else renderGrid();
+    closeModal('delModal'); toast('Page deleted');
+  } catch(e) { toast('Delete failed','error'); }
+  btn.innerHTML='Delete page'; btn.disabled=false; deleteTargetId=null;
+}
+
+// ── NEW PAGE ──
+function openNewModal() {
+  $('newName').value=''; $('newSlug').value=''; $('slugHint').textContent='yourname';
+  $('newErr').className='alert alert-err'; $('newModal').classList.add('open');
+  setTimeout(()=>$('newName').focus(),80);
+}
+function autoSlug() { const s=slugify($('newName').value)||''; $('newSlug').value=s; $('slugHint').textContent=s||'yourname'; }
+function cleanSlug(inputId, hintId) { const inp=$(inputId); inp.value=slugify(inp.value); $(hintId).textContent=inp.value||'yourname'; }
+
+async function createPage() {
+  const name=$('newName').value.trim(), slug=$('newSlug').value.trim();
+  const errEl=$('newErr'); errEl.className='alert alert-err';
+  if(!name){ $('newErrTxt').textContent='Please enter a page name.'; errEl.className+=' show'; return; }
+  if(!slug){ $('newErrTxt').textContent='Please enter a URL slug.'; errEl.className+=' show'; return; }
+  if(!/^[a-z0-9-]+$/.test(slug)){ $('newErrTxt').textContent='Slug can only contain letters, numbers and hyphens.'; errEl.className+=' show'; return; }
+  const btn=$('createBtn');
+  btn.innerHTML=`<div class="spin" style="width:15px;height:15px;margin:0 auto"></div>`; btn.disabled=true;
+  try {
+    const taken=await DB.slugTaken(slug);
+    if(taken){ $('newErrTxt').textContent='That slug is already taken. Try another.'; errEl.className+=' show'; btn.innerHTML='Create page'; btn.disabled=false; return; }
+    const id=await DB.createPage({userId:currentUser.uid,name,slug,theme:'blush',avatarEmoji:'',links:[]});
+    closeModal('newModal'); window.location.href=`editor.html?id=${id}`;
+  } catch(e) {
+    console.error(e);
+    $('newErrTxt').textContent=e?.code==='permission-denied'?'Permission denied — check Firestore rules.':(e?.message||'Something went wrong.');
+    errEl.className+=' show'; btn.innerHTML='Create page'; btn.disabled=false;
   }
+}
 
-  function downloadPage(id) {
-    const page = pages.find(p => p.id === id);
-    if (!page) return;
-    const html = generatePageHTML(page);
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
-    a.download = `${page.slug || 'page'}-socialtree.html`;
-    a.click();
-    toast('Downloaded!');
-  }
-
-  function openDeleteModal(id, name) {
-    deleteTargetId = id;
-    $('delName').textContent = name;
-    $('delModal').classList.add('open');
-  }
-
-  async function confirmDelete() {
-    if (!deleteTargetId) return;
-    const btn = $('delConfirmBtn');
-    btn.innerHTML = '<div class="spin" style="width:14px;height:14px"></div>';
-    btn.disabled = true;
-    try {
-      await DB.deletePage(deleteTargetId);
-      pages = pages.filter(p => p.id !== deleteTargetId);
-      if (pages.length === 0) {
-        $('grid').classList.add('hidden');
-        $('emptyState').classList.remove('hidden');
-      } else {
-        renderGrid();
-      }
-      closeModal('delModal');
-      toast('Page deleted');
-    } catch(e) {
-      toast('Delete failed', 'error');
-    }
-    btn.innerHTML = 'Delete'; btn.disabled = false;
-    deleteTargetId = null;
-  }
-
-  // ── NEW PAGE MODAL ──
-  function openNewModal() {
-    $('newName').value = '';
-    $('newSlug').value = '';
-    $('slugHint').textContent = 'yourname';
-    $('newErr').className = 'alert alert-err';
-    $('newModal').classList.add('open');
-    setTimeout(() => $('newName').focus(), 80);
-  }
-
-  function autoSlug() {
-    const name = $('newName').value;
-    const s = slugify(name) || '';
-    $('newSlug').value = s;
-    $('slugHint').textContent = s || 'yourname';
-  }
-
-  function cleanSlug(inputId, hintId) {
-    const inp = $(inputId);
-    inp.value = slugify(inp.value);
-    $(hintId).textContent = inp.value || 'yourname';
-  }
-
-  async function createPage() {
-    const name = $('newName').value.trim();
-    const slug = $('newSlug').value.trim();
-    const errEl = $('newErr');
-    errEl.className = 'alert alert-err';
-
-    if (!name) { errEl.textContent = 'Please enter a page name.'; errEl.className += ' show'; return; }
-    if (!slug) { errEl.textContent = 'Please enter a URL slug.';  errEl.className += ' show'; return; }
-    if (!/^[a-z0-9-]+$/.test(slug)) {
-      errEl.textContent = 'Slug can only contain letters, numbers, and hyphens.';
-      errEl.className += ' show'; return;
-    }
-
-    const btn = $('createBtn');
-    btn.innerHTML = '<div class="spin" style="width:15px;height:15px;margin:0 auto"></div>';
-    btn.disabled = true;
-
-    try {
-      const taken = await DB.slugTaken(slug);
-      if (taken) {
-        errEl.textContent = 'That slug is already taken. Try another.';
-        errEl.className += ' show';
-        btn.innerHTML = 'Create page →'; btn.disabled = false; return;
-      }
-
-      const id = await DB.createPage({
-        userId: currentUser.uid,
-        name, slug,
-        theme: 'blush',
-        avatarEmoji: '🌸',
-        links: [],
-      });
-
-      closeModal('newModal');
-      window.location.href = `editor.html?id=${id}`;
-    } catch(e) {
-      console.error('createPage error:', e);
-      const msg = e?.code === 'permission-denied'
-        ? 'Permission denied — check Firestore rules (see README).'
-        : (e?.message || 'Something went wrong. Please try again.');
-      errEl.textContent = msg;
-      errEl.className += ' show';
-      btn.innerHTML = 'Create page →'; btn.disabled = false;
-    }
-  }
-
-  // ── MODAL HELPERS ──
-  function closeModal(id) { $(id).classList.remove('open'); }
-  function bgClose(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+function closeModal(id){ $(id).classList.remove('open'); }
+function bgClose(e,id){ if(e.target===e.currentTarget) closeModal(id); }
 </script>
 </body>
 </html>

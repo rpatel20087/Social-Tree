@@ -88,15 +88,15 @@ function buildHTML(page) {
 <meta property="og:title" content="${safeName}">
 <meta name="description" content="${safeBio}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;background:${t.bg};padding:3rem 1rem 2rem}
+body{font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;background:${t.bg};padding:3rem 1rem 2rem}
 .container{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;animation:up .5s ease}
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .avatar{width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.6);margin-bottom:1rem;display:flex;align-items:center;justify-content:center;font-size:2.2rem;border:3px solid rgba(255,255,255,.8);box-shadow:0 2px 16px rgba(0,0,0,.08);overflow:hidden;flex-shrink:0}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.name{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.35rem;color:#2d2d2d;text-align:center}
+.name{font-family:'Instrument Serif',serif;font-size:1.5rem;margin-bottom:.35rem;color:#2d2d2d;text-align:center}
 .bio{font-size:.82rem;color:#888;text-align:center;line-height:1.6;max-width:280px;margin-bottom:1.75rem}
 .links{width:100%;display:flex;flex-direction:column;gap:.65rem}
 .link-btn{display:flex;align-items:center;gap:.7rem;padding:.85rem 1.1rem;border-radius:14px;background:${t.card};text-decoration:none;color:#2d2d2d;font-size:.88rem;font-weight:500;transition:transform .18s,box-shadow .18s;border:1px solid rgba(255,255,255,.6)}

@@ -1,9 +1,16 @@
+// ═══════════════════════════════════════════════
+//  Socialtree — shared.js
+//  Firebase (Auth + Firestore) + icons + utilities
+// ═══════════════════════════════════════════════
 
+// ──────────────────────────────────────────────
+//  FIREBASE CONFIG
+// ──────────────────────────────────────────────
 const FIREBASE_CONFIG = {
-  apiKey:            "API KEY",
+  apiKey:            "AIzaSyAtRjAiDBebya-f9IzQUnKPmNxoVle6J34",
   authDomain:        "socialtree-web.firebaseapp.com",
   projectId:         "socialtree-web",
-  storageBucket:     "BUCKET ID",
+  storageBucket:     "socialtree-web.firebasestorage.app",
   messagingSenderId: "916898496914",
   appId:             "1:916898496914:web:4b0a7a63332034d36e014b"
 };
@@ -215,7 +222,7 @@ function generatePageHTML(page) {
 
   const avatarHTML = page.avatarDataUrl
     ? `<div class="avatar"><img src="${page.avatarDataUrl}" alt="avatar"></div>`
-    : `<div class="avatar"><span>${page.avatarEmoji || '🌸'}</span></div>`;
+    : `<div class="avatar"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1.4" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
 
   const linksHTML = (page.links || []).map(l => {
     const ic  = ICONS[l.iconId] || ICONS.link;
@@ -244,15 +251,15 @@ function generatePageHTML(page) {
 <meta property="og:title" content="${safeName}">
 <meta name="description" content="${safeBio}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;background:${t.bg};padding:3rem 1rem 2rem}
+body{font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;background:${t.bg};padding:3rem 1rem 2rem}
 .container{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;animation:up .5s ease}
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .avatar{width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.6);margin-bottom:1rem;display:flex;align-items:center;justify-content:center;font-size:2.2rem;border:3px solid rgba(255,255,255,.8);box-shadow:0 2px 16px rgba(0,0,0,.08);overflow:hidden;flex-shrink:0}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.name{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.35rem;color:#2d2d2d;text-align:center}
+.name{font-family:'Instrument Serif',serif;font-size:1.5rem;margin-bottom:.35rem;color:#2d2d2d;text-align:center}
 .bio{font-size:.82rem;color:#888;text-align:center;line-height:1.6;max-width:280px;margin-bottom:1.75rem}
 .links{width:100%;display:flex;flex-direction:column;gap:.65rem}
 .link-btn{display:flex;align-items:center;gap:.7rem;padding:.85rem 1.1rem;border-radius:14px;background:${t.card};text-decoration:none;color:#2d2d2d;font-size:.88rem;font-weight:500;transition:transform .18s,box-shadow .18s;border:1px solid rgba(255,255,255,.6)}
@@ -285,7 +292,12 @@ ${linksHTML}
 function toast(msg, type = '') {
   const el = document.getElementById('toast');
   if (!el) return;
-  el.textContent = msg;
+  const icons = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    error:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+    '':      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  };
+  el.innerHTML = (icons[type] || icons['']) + `<span>${msg}</span>`;
   el.className = ['show', type ? `t-${type}` : ''].filter(Boolean).join(' ');
   clearTimeout(el._t);
   el._t = setTimeout(() => { el.className = ''; }, 3200);
